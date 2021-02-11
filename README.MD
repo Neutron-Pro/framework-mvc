@@ -167,6 +167,8 @@ class ParentController extends Controller
 }
 ```
 
+---
+
 ## Les layouts et les vues
 
 Le layout est la partie qui est le plus courant de votre code HTML, Elle contiendra votre `head`, `body`, `header` et `footer`.
@@ -217,3 +219,65 @@ Les vues est la partie la plus dense de votre site, c'est l'affichage qui change
 ```
 
 ---
+
+## Les models
+
+Les models vous permettent de gérer vos requêtes SQL en dehors de vos controllers.
+
+```php
+namespace App\Model;
+use NeutronStars\Model\Model;
+
+class UserModel extends Model
+{
+  public function __construct()
+  {
+    // Spécifier le nom de la table SQL que gérera ce model
+    parent::__construct('users');
+  }
+  
+  // Ajouter des requêtes à votre model
+  public function insert($email, $password): void
+  {
+    $this->createQuery()
+         ->insertInto('email,password', '?,?')
+         ->setParameters([$email, $password])
+         ->execute();
+  }
+  
+  public function userByEmail($email): ?Object
+  {
+    return $this->createQuery()
+                ->select('*')->where('email=?')
+                ->setParameters([$email])
+                ->getResult();
+  }
+}
+```
+
+Pour utiliser votre model dans vos controller, vous devez simplement l'initialiser
+
+```php
+namespace App\Controller;
+use NeutronStars\Controller\Controller;
+use App\Model\UserModel;
+
+class UserController extends Controller
+{
+  private UserModel $userModel;
+  
+  public function __construct() {
+    $this->userModel = new UserModel();
+  }
+  
+  public function index(){
+    // Pour récupérer tous les utilisateurs enregistrés dans la base de donnée
+    $users = $this->userModel->all();
+  }
+  
+  public function user($id){
+    // Pour récupérer tous un utilisateur enregistré dans la base de donnée
+    $user = $this->userModel->findById($id);
+  }
+}
+```
