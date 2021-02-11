@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+*:before, *, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, input, textarea, select, button {
+    font: 400 16px/1.3 'Roboto', sans-serif;
+}
+
+li {
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+/* PAGE */
+
+header {
+    background-color: #363636;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+}
+
+header .socials{
+    padding: 1rem;
+}
+
+header .socials a {
+    margin-left: .5rem;
+}
+
+header li a{
+    display: inline-block;
+    padding: 1rem;
+}
+
+header li a:hover {
+    background-color: #5c5c5c;
+}
+
+main h1 {
+    font-size: 2rem;
+}
+
+span{
+    color: #238fe2;
+}
+
+.container{
+    width: 100%;
+    max-width: 960px;
+    padding: 2rem .7rem;
+    margin: auto;
+}
+
+.jumbotron{
+    padding: 1rem;
+    margin: 2rem 0;
+    border-radius: .3rem;
+    background-color: #c7c7c7;
+    font-style: italic;
+}
+
+.separator{
+    background-color: #5c5c5c;
+    border-radius: 50%;
+    height: .3rem;
+    margin: 3rem 1rem;
+}
+
+section{
+    margin: 1rem 0;
+}
+
+h2{
+    margin-bottom: 1rem;
+}
+
+.code {
+    background-color: #1f1f1f;
+    color: white;
+    padding: 1rem;
+    margin: 1rem;
+    overflow-x: auto;
+}
