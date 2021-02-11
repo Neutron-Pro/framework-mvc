@@ -1,34 +1,32 @@
 <?php
 namespace App\Controller;
+use App\Model\UserModel;
 use NeutronStars\Api\Controller\Controller;
 
 class UserController extends Controller
 {
-    private array $users = [
-        [
-            'id'   => 1,
-            'name' => 'John Doe'
-        ],
-        [
-            'id'   => 2,
-            'name' => 'Mike Brown'
-        ]
-    ];
+    private UserModel $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new UserModel();
+    }
 
     public function users()
     {
         $this->render('app.users.users', [
-            'users' => $this->users
+            'users' => $this->userModel->all()
         ]);
     }
 
     public function user($id)
     {
-        if(empty($this->users[$id-1])){
+        $user = $this->userModel->findById($id);
+        if(empty($user)){
             $this->page404();
         }
         $this->render('app.users.user', [
-            'user' => $this->users[$id-1]
+            'user' => $user
         ]);
     }
 }

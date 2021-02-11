@@ -3,8 +3,9 @@
     <div class="users">
         <?php foreach ($users as $user): ?>
             <div class="user">
-                <h2><?=$user['name']?></h2>
-                <p>Son identifiant est: <b><?=$user['id']?></b> <a href="<?= $router->get('users.user', ['id' => $user['id']]) ?>">En savoir plus</a></p>
+                <h2><?=$user->name?></h2>
+                <p>Email: <b><?=$user->email?></b></p>
+                <p>Son identifiant est: <b><?=$user->id?></b> <a href="<?= $router->get('users.user', ['id' => $user->id]) ?>">En savoir plus</a></p>
             </div>
         <?php endforeach; ?>
     </div>

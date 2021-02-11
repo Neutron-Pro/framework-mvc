@@ -1,6 +1,7 @@
 <?php
 namespace NeutronStars\Core;
 use NeutronStars\Core\Router\Router;
+use NeutronStars\Core\Database\Database;
 use ReflectionMethod;
 
 class Kernel
@@ -18,6 +19,7 @@ class Kernel
     }
 
     private Router $router;
+    private ?Database $database = null;
 
     public function __construct(Router $router)
     {
@@ -27,6 +29,20 @@ class Kernel
     public function getRouter(): Router
     {
         return $this->router;
+    }
+
+    public function getDatabase(): Database
+    {
+        if($this->database == null){
+            $this->database = new Database(DB_NAME, [
+                'url'      => DB_HOST,
+                'port'     => DB_PORT,
+                'user'     => DB_USER,
+                'password' => DB_PASSWORD,
+                'charset'  => DB_CHARSET
+            ]);
+        }
+        return $this->database;
     }
 
     public function handle(): void
