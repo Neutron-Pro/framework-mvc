@@ -102,39 +102,38 @@ class QueryBuilder implements Query
     {
         $request = '';
 
-        if(!empty($this->insertInto))
-        {
+        if (!empty($this->insertInto)) {
             $request = $this->insertInto;
-            if(!empty($this->onDuplicateKeyUpdate)){
+            if (!empty($this->onDuplicateKeyUpdate)) {
                 $request .= $this->onDuplicateKeyUpdate;
             }
             return $request;
         }
 
-        if(!empty($this->select)) {
+        if (!empty($this->select)) {
             $request .= $this->select;
-        }elseif(!empty($this->update)){
+        } elseif (!empty($this->update)) {
             $request .= $this->update;
-        }elseif(!empty($this->delete)) {
+        } elseif (!empty($this->delete)) {
             $request .= $this->delete;
         }
 
-        if(!empty($this->leftJoin)) {
+        if (!empty($this->leftJoin)) {
             $request .= $this->leftJoin;
         }
-        if(!empty($this->where)) {
+        if (!empty($this->where)) {
             $request .= $this->where;
         }
-        if(!empty($this->groupBy)) {
+        if (!empty($this->groupBy)) {
             $request .= $this->groupBy;
         }
-        if(!empty($this->having)) {
+        if (!empty($this->having)) {
             $request .= $this->having;
         }
-        if(!empty($this->orderBy)) {
+        if (!empty($this->orderBy)) {
             $request .= $this->orderBy;
         }
-        if(!empty($this->limit)) {
+        if (!empty($this->limit)) {
             $request .= $this->limit;
         }
         return $request;
