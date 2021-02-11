@@ -81,7 +81,7 @@ $params = [
 $router->add('test', $params);
 ```
 
-Il y a aussi la possibilité d'ajouter des routes enfant ainsi que des paramètres customisés.
+Il y a aussi la possibilité d'ajouter des routes enfants ainsi que des paramètres customisés.
 
 ```php
 $params = [
@@ -89,15 +89,39 @@ $params = [
     'controller' => 'App\\Controller\\ParentController#index',
     /* Ajouter un enfant à la route pour ajouter un chemin après le /test */
     'children' => [
-        /* Pour les route enfant c'est exactement les même paramètre que le parent. Juste qu'il prends son nom directement via la clef. */
+        /* Pour les route enfant c'est exactement les mêmes paramètres que le parent. Juste qu'il prend un nom directement via la clef. */
         'child' => [
             /* Ceci donnera: /parent/children */
             'path' => '/children',
             /*  */
             'controller' => 'App\\Controller\\ParentController#child'
+        ],
+        'child2' => [
+            /* 
+              Pour ajouter une route avec un paramètre customisable, il vous faudra utiliser les accolades
+              Ceci donnera: /parent/test-101
+            */
+            'path' => '/{slug}-{id}',
+            'controller' => 'App\\Controller\\ParentController#child2',
+            /* Ensuite utilisez les paramètres pour indiquer via une regex, la règle à appliquer sur vos clefs dans le path. */
+            'params' => [
+                /* Le slug accepte tous les caractère de A à Z et de 0 à 9 sans faire attention à la case. */
+                'slug' => '/[a-zA-Z0-9]+/',
+                /* L'id accepte tous les caractères numérique. */
+                'id'   => '/[0-9]+/'
+            ],
+            /* Vous pouvez bien sur continuer à créer des enfants dans les enfants sans limite: */
+            'children' => [
+                'subChild' => [
+                    /* Ceci donnera: /parent/test-101/sub-child */
+                    'path' => '/sub-child',
+                    /* Ainsi de suite */
+                    ...
+                ]
+            ]
         ]
     ]
 ];
-// Ajouter votre route
+// Puis Ajouter votre route
 $router->add('test', $params);
 ```
