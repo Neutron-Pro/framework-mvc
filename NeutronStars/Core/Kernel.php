@@ -12,7 +12,7 @@ class Kernel
         return self::$instance;
     }
 
-    public static function setInstance(Router $router): void
+    public static function create(Router $router): void
     {
         self::$instance = new self($router);
     }
