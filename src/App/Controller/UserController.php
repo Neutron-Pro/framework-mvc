@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Model\UserModel;
-use NeutronStars\Api\Controller\Controller;
+use NeutronStars\Controller\Controller;
 
 class UserController extends Controller
 {

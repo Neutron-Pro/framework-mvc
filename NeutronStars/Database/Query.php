@@ -1,7 +1,7 @@
 <?php
 
 
-namespace NeutronStars\Core\Database;
+namespace NeutronStars\Database;
 
 interface Query
 {

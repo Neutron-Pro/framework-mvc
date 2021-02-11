@@ -1,7 +1,5 @@
 <?php
-
-
-namespace NeutronStars\Api;
+namespace NeutronStars;
 
 
 class HTTPCode

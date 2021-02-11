@@ -1,8 +1,8 @@
 <?php
-namespace NeutronStars\Api\Model;
+namespace NeutronStars\Model;
 
-use NeutronStars\Core\Kernel;
-use NeutronStars\Core\Database\QueryExecutor;
+use NeutronStars\Kernel;
+use NeutronStars\Database\QueryExecutor;
 
 abstract class Model
 {

@@ -1,6 +1,6 @@
 <?php
 namespace App\Model;
-use NeutronStars\Api\Model\Model;
+use NeutronStars\Model\Model;
 
 class UserModel extends Model
 {

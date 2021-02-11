@@ -1,5 +1,5 @@
 <?php
-namespace NeutronStars\Core\Database;
+namespace NeutronStars\Database;
 
 class QueryExecutor implements Query
 {

@@ -1,8 +1,8 @@
 <?php
-namespace NeutronStars\Api\Controller;
+namespace NeutronStars\Controller;
 
-use NeutronStars\Api\HTTPCode;
-use NeutronStars\Core\Kernel;
+use NeutronStars\HTTPCode;
+use NeutronStars\Kernel;
 
 abstract class Controller
 {

@@ -1,7 +1,7 @@
 <?php
-namespace NeutronStars\Core;
-use NeutronStars\Core\Router\Router;
-use NeutronStars\Core\Database\Database;
+namespace NeutronStars;
+use NeutronStars\Router\Router;
+use NeutronStars\Database\Database;
 use ReflectionMethod;
 
 class Kernel

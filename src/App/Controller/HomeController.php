@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-use NeutronStars\Api\Controller\Controller;
+use NeutronStars\Controller\Controller;
 
 class HomeController extends Controller
 {

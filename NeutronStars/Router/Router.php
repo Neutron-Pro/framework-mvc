@@ -1,5 +1,5 @@
 <?php
-namespace NeutronStars\Core\Router;
+namespace NeutronStars\Router;
 
 class Router
 {

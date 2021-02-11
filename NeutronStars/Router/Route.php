@@ -1,6 +1,6 @@
 <?php
-namespace NeutronStars\Core\Router;
-use NeutronStars\Api\Controller\Controller;
+namespace NeutronStars\Router;
+use NeutronStars\Controller\Controller;
 
 class Route
 {

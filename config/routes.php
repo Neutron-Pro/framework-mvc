@@ -1,5 +1,5 @@
 <?php
-use NeutronStars\Core\Kernel;
+use NeutronStars\Kernel;
 
 Kernel::get()->getRouter()
     ->add('home', [

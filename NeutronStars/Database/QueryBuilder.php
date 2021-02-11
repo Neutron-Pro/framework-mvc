@@ -1,6 +1,6 @@
 <?php
 
-namespace NeutronStars\Core\Database;
+namespace NeutronStars\Database;
 
 class QueryBuilder implements Query
 {
