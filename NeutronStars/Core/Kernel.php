@@ -5,7 +5,7 @@ use ReflectionMethod;
 
 class Kernel
 {
-    private static $instance = null;
+    private static ?Kernel $instance = null;
 
     public static function get(): Kernel
     {
