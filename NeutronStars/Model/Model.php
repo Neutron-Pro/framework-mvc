@@ -46,8 +46,8 @@ abstract class Model
             ->getResults()[0]->count;
     }
 
-    protected function createQuery(): QueryExecutor
+    protected function createQuery(string $alias = null): QueryExecutor
     {
-        return Kernel::get()->getDatabase()->query($this->table);
+        return Kernel::get()->getDatabase()->query($this->table.($alias !== null ? ' '.$alias : ''));
     }
 }
