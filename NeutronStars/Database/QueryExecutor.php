@@ -1,4 +1,5 @@
 <?php
+
 namespace NeutronStars\Database;
 
 class QueryExecutor implements Query
@@ -6,7 +7,6 @@ class QueryExecutor implements Query
     private Database $database;
     private QueryBuilder $queryBuilder;
     private array $parameters = [];
-
     public function __construct(Database $database, QueryBuilder $queryBuilder)
     {
         $this->database = $database;
@@ -91,7 +91,7 @@ class QueryExecutor implements Query
         return $this;
     }
 
-    public function getResult(): ?Object
+    public function getResult(): ?object
     {
         $result = $this->database->fetch($this->queryBuilder->build(), $this->parameters);
         return $result ? $result : null;

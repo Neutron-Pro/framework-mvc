@@ -1,7 +1,7 @@
 <?php
 
-
 namespace App\Controller;
+
 use NeutronStars\Controller\Controller;
 
 class ErrorController extends Controller

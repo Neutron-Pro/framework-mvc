@@ -28,22 +28,37 @@ class Database
         $this->connect($dbname, $this->fillDefaultData($data));
     }
 
-    private function connect(string $dbname, array $data)
+    private function connect(string $dbname, array $data): void
     {
-        $this->pdo = new PDO('mysql:host='.$data['url'].';port='.$data['port'].';dbname='.$dbname, $data['user'], $data['password'], array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES '.$data['charset'],
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
-        ));
+        $this->pdo = new PDO(
+            'mysql:host=' . $data['url'] . ';port=' . $data['port'] . ';dbname=' . $dbname,
+            $data['user'],
+            $data['password'],
+            array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $data['charset'],
+            PDO::ATTR_DEFAULT_FETCH_MODE => DB_FETCH_MODE,
+            PDO::ATTR_ERRMODE => DB_ERROR_MODE
+            )
+        );
     }
 
     private function fillDefaultData(array $data = []): array
     {
-        if(!isset($data['url'])) { $data['url']   = '127.0.0.1'; }
-        if(!isset($data['port'])) { $data['port'] = 3306; }
-        if(!isset($data['user'])) { $data['user'] = 'root'; }
-        if(!isset($data['password'])) { $data['password'] = ''; }
-        if(!isset($data['charset'])) { $data['charset'] = 'utf8mb4'; }
+        if (!isset($data['url'])) {
+            $data['url']   = '127.0.0.1';
+        }
+        if (!isset($data['port'])) {
+            $data['port'] = 3306;
+        }
+        if (!isset($data['user'])) {
+            $data['user'] = 'root';
+        }
+        if (!isset($data['password'])) {
+            $data['password'] = '';
+        }
+        if (!isset($data['charset'])) {
+            $data['charset'] = 'utf8mb4';
+        }
         return $data;
     }
 
@@ -90,7 +105,7 @@ class Database
     public function execute(string $query, array $parameters = []): ?PDOStatement
     {
         $query = $this->pdo->prepare($query);
-        if(!$query){
+        if (!$query) {
             return null;
         }
         $success = $query->execute($parameters);

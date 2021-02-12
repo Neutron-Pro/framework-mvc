@@ -1,4 +1,5 @@
 <?php
+
 namespace NeutronStars\Model;
 
 use NeutronStars\Kernel;
@@ -7,7 +8,6 @@ use NeutronStars\Database\QueryExecutor;
 abstract class Model
 {
     private string $table;
-
     public function __construct(string $table)
     {
         $this->table = $table;
@@ -20,11 +20,11 @@ abstract class Model
             ->getResults();
     }
 
-    public function findById($id, string $column = 'id'): ?Object
+    public function findById($id, string $column = 'id'): ?object
     {
         return $this->createQuery()
                ->select('*')
-               ->where($column.'=:id')
+               ->where($column . '=:id')
                ->setParameters([
                    ':id' => $id
                ])->getResult();
@@ -34,7 +34,7 @@ abstract class Model
     {
         $this->createQuery()
             ->delete()
-            ->where($column.'=:id')
+            ->where($column . '=:id')
             ->setParameters([
                 ':id' => $id
             ])->execute();
@@ -48,6 +48,6 @@ abstract class Model
 
     protected function createQuery(string $alias = null): QueryExecutor
     {
-        return Kernel::get()->getDatabase()->query($this->table.($alias !== null ? ' '.$alias : ''));
+        return Kernel::get()->getDatabase()->query($this->table . ($alias !== null ? ' ' . $alias : ''));
     }
 }

@@ -1,5 +1,8 @@
 <?php
 
+/* URL BASE (Empty recommended) */
+define('BASE_PATH', '');
+
 /* Layouts Folder */
 define('LAYOUTS', '../src/layouts');
 
@@ -14,3 +17,5 @@ define('DB_NAME', '');
 define('DB_USER', '');
 define('DB_PASSWORD', '');
 define('DB_CHARSET', 'utf8mb4');
+define('DB_FETCH_MODE', PDO::FETCH_OBJ);
+define('DB_ERROR_MODE', PDO::ERRMODE_WARNING);

@@ -1,12 +1,11 @@
 <?php
 
-
 namespace NeutronStars\Database;
 
 interface Query
 {
-    const ORDER_BY_ASC = 'ASC';
-    const ORDER_BY_DESC = 'DESC';
+    public const ORDER_BY_ASC = 'ASC';
+    public const ORDER_BY_DESC = 'DESC';
 
     public function insertInto(string $columns, string ...$values): self;
 
@@ -31,6 +30,4 @@ interface Query
     public function orderBy(string $column, string $order = self::ORDER_BY_ASC): self;
 
     public function limit(int $limit, int $offset = 0): self;
-
-
 }

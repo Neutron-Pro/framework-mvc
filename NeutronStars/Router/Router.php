@@ -1,4 +1,5 @@
 <?php
+
 namespace NeutronStars\Router;
 
 class Router
@@ -7,56 +8,67 @@ class Router
      * @var Route[]
      */
     private array $routes = [];
-
+    private string $pathBase;
     private string $path;
-
-    public function __construct(string $path)
+    public function __construct(string $path, string $pathBase)
     {
-        if(mb_strlen($path) > 1){
+        if (mb_strlen($path) > 1) {
             $path = trim(rtrim($path, '/'));
         }
-        $this->path = $path;
+        $this->pathBase = $pathBase;
+        if (strlen($pathBase) > 0) {
+            if (strpos($path, $pathBase) === 0) {
+                $this->path = substr_replace($path, '', 0, strlen($pathBase));
+            } else {
+                $this->path = $pathBase . '/404';
+            }
+        } else {
+            $this->path = $path;
+        }
+        if (strlen($this->path) < 1) {
+            $this->path = '/';
+        }
     }
 
-    public function add(string $name, array $route): self
+    final public function add(string $name, array $route): self
     {
         $route = $this->createRecursive($name, $route);
         $this->routes[$route->getName()] = $route;
         return $this;
     }
-    private function createRecursive($name, array $array): Route
+    final private function createRecursive($name, array $array): Route
     {
         $controllerInfo = explode('#', $array['controller']);
-        $route = new Route($name, $array['path'], new $controllerInfo[0], $controllerInfo[1], $array['params'] ?? []);
-        foreach (($array['children'] ?? []) as $key => $value ){
+        $route = new Route($name, $array['path'], new $controllerInfo[0](), $controllerInfo[1], $array['params'] ?? []);
+        foreach (($array['children'] ?? []) as $key => $value) {
             $route->add($this->createRecursive($key, $value));
         }
         return $route;
     }
 
-    public function find(&$params): ?Route
+    final public function find(&$params): ?Route
     {
-        if($params == null){
+        if ($params == null) {
             $params = [];
         }
-        foreach ($this->routes as $route){
+        foreach ($this->routes as $route) {
             $checkRoute = $route->get($this->path, $params);
-            if($checkRoute != null){
+            if ($checkRoute != null) {
                 return $checkRoute;
             }
         }
         return $this->routes['404'];
     }
 
-    public function get(string $name, array $params = []): string
+    final public function get(string $name, array $params = []): string
     {
         $split = explode('.', $name);
-        if(!empty($this->routes[$split[0]])){
+        if (!empty($this->routes[$split[0]])) {
             $build = $this->routes[$split[0]]->buildPath(array_slice($split, 1), $params);
-            if($build != null){
-                return $build;
+            if ($build != null) {
+                return $this->pathBase . $build;
             }
         }
-        return '/';
+        return $this->pathBase . '/';
     }
 }
