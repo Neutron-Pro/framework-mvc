@@ -16,39 +16,32 @@ class DefaultController extends Controller
 
     public function contact()
     {
-        $values = [];
-        $errors = [];
-        $send = false;
-        $success = false;
-        if (!empty($_POST)) {
-            $validator = new FormValidator($_POST, [
-               'email'   => ['type' => 'email'],
-               'name'    => ['min' => 3, 'max' => 30],
-               'message' => ['min' => 10]
-            ]);
-            $values = $validator->getValues();
-            $errors = $validator->getErrors();
-            if ($validator->isValid()) {
-                $send = true;
-                try {
-                    $this->createEmail()
-                        ->add($values['email'], $values['name'])
-                        ->send('Test de mail', 'mail.index', [
-                            'name'    => $values['name'],
-                            'email'   => $values['email'],
-                            'message' => $values['message']
-                        ]);
-                    $success = true;
-                    $values = [];
-                } catch (Exception $e) {
-                }
-            }
+        $validator = new FormValidator($_POST, [
+            'email'   => ['type' => 'email'],
+            'name'    => ['min' => 3, 'max' => 30],
+            'message' => ['min' => 10]
+        ]);
+
+        if ($validator->isSubmit() && $validator->isValid()) {
+            $send = true;
+            try {
+                $values = $validator->getValues();
+                $this->createEmail()
+                    ->add($values['email'], $values['name'])
+                    ->send('Test de mail', 'mail.index', [
+                        'name'    => $values['name'],
+                        'email'   => $values['email'],
+                        'message' => $values['message']
+                    ]);
+                $success = true;
+                $validator->clearValues();
+            } catch (Exception $e) {}
         }
 
         $this->render('app.contact', [
-            'form'    => new FormBuilder($values, $errors),
-            'send'    => $send,
-            'success' => $success
+            'form'    => new FormBuilder($validator->getValues(), $validator->getErrors()),
+            'send'    => $send ?? false,
+            'success' => $success ?? false
         ]);
     }
 }

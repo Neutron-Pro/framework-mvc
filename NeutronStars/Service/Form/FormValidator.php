@@ -10,11 +10,16 @@ class FormValidator
     const REQUIRE_AREA   = 'Ce champs est requis !';
     const NOT_VALID_AREA = 'Ce champs n\'est pas valide !';
     private array $errors = [];
-    private array $values;
+    private array $values = [];
+    private bool $submitted = false;
+
     public function __construct(array $inputs, array $validate)
     {
-        $this->values = $this->xssCleanRecursive($inputs);
-        $this->validate($this->values, $validate);
+        if (!empty($inputs)) {
+            $this->submitted = true;
+            $this->values = $this->xssCleanRecursive($inputs);
+            $this->validate($this->values, $validate);
+        }
     }
 
     private function xssCleanRecursive(array $array): array
@@ -27,6 +32,11 @@ class FormValidator
             }
         }
         return $array;
+    }
+
+    public function isSubmit(): bool
+    {
+        return $this->submitted;
     }
 
     private function validate(array $input, array $validate): void
@@ -68,6 +78,11 @@ class FormValidator
     public function getValues(): array
     {
         return $this->values;
+    }
+
+    public function clearValues(): void
+    {
+        $this->values = [];
     }
 
     public function getErrors(): array
