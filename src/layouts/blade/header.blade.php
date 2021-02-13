@@ -2,6 +2,7 @@
     <nav>
         <ul>
             <li><a href="@router('home')"><i class="fas fa-home"></i></a></li>
+            <li><a href="@router('contact')"><i class="fas fa-envelope"></i></a></li>
         </ul>
     </nav>
     <div class="socials">

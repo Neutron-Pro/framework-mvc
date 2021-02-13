@@ -4,6 +4,9 @@ namespace NeutronStars;
 
 use NeutronStars\Router\Router;
 use NeutronStars\Database\Database;
+use NeutronStars\View\Blade\BladeOne;
+
+use ReflectionException;
 use ReflectionMethod;
 
 class Kernel
@@ -21,6 +24,8 @@ class Kernel
 
     private Router $router;
     private ?Database $database = null;
+    private ?BladeOne $bladeOne = null;
+
     public function __construct(Router $router)
     {
         $this->router = $router;
@@ -33,7 +38,7 @@ class Kernel
 
     final public function getDatabase(): Database
     {
-        if ($this->database == null) {
+        if ($this->database === null) {
             $this->database = new Database(DB_NAME, [
                 'url'      => DB_HOST,
                 'port'     => DB_PORT,
@@ -45,6 +50,22 @@ class Kernel
         return $this->database;
     }
 
+    public function getBlade(): BladeOne
+    {
+        if ($this->bladeOne === null) {
+            $this->bladeOne = new BladeOne([VIEWS, LAYOUTS], BLADE_CACHE);
+            $this->bladeOne->directive('router', function (string $query): string {
+                return '<?= $this->getRoute(' . $query . ') ?>';
+            });
+        }
+        return $this->bladeOne;
+    }
+
+    /**
+     * @throws ReflectionException if the object parameter does not contain an
+     * instance of the class that this method was declared in or the method
+     * invocation failed.
+     */
     final public function handle(): void
     {
         $route = $this->router->find($params);

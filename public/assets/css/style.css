@@ -37,6 +37,10 @@ header .socials a {
     margin-left: .5rem;
 }
 
+header nav ul{
+    display: flex;
+}
+
 header li a{
     display: inline-block;
     padding: 1rem;
@@ -69,6 +73,16 @@ span{
     font-style: italic;
 }
 
+.jumbotron.error{
+    background-color: #d54141;
+    color: white;
+}
+
+.jumbotron.success{
+    background-color: #23a123;
+    color: white;
+}
+
 .separator{
     background-color: #5c5c5c;
     border-radius: 50%;
@@ -90,4 +104,35 @@ h2{
     padding: 1rem;
     margin: 1rem;
     overflow-x: auto;
+}
+
+form > * {
+    display: block;
+    width: 100%;
+    margin-bottom: .3rem;
+}
+
+form > label {
+    font-weight: 700;
+}
+
+form > input, form > select, form > textarea{
+    margin-bottom: 1rem;
+    padding: .3rem;
+    border: 1px solid #c7c7c7;
+    outline: none;
+    border-radius: .3rem;
+}
+
+form input[type="submit"] {
+    width: fit-content;
+}
+
+form .error {
+    color: #d54141;
+    font-style: italic;
+}
+
+form .error + * {
+    border: 2px solid #d54141;
 }

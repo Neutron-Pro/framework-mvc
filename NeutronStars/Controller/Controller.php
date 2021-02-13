@@ -4,30 +4,21 @@ namespace NeutronStars\Controller;
 
 use NeutronStars\HTTPCode;
 use NeutronStars\Kernel;
+use NeutronStars\Service\PHPMailer\Email;
 use NeutronStars\View\Blade\BladeOne;
+use NeutronStars\View\View;
 use NeutronStars\View\ViewEngine;
 
 abstract class Controller
 {
     protected function renderBlade(string $view, array $params = []): void
     {
-        $blade = new BladeOne([VIEWS, LAYOUTS], BLADE_CACHE);
-        $blade->directive('router', function (string $query): string {
-            return '<?= $this->getRoute(' . $query . ') ?>';
-        });
-        echo $blade->run($view, $params);
-        die;
+        echo (new View(ViewEngine::BLADE, $view, $params));
     }
 
     protected function renderPHP(string $view, array $params = [], string $layout = 'index'): void
     {
-        $params['router'] = Kernel::get()->getRouter();
-        ob_start();
-        extract($params);
-        require VIEWS . '/' . str_replace('.', '/', $view) . '.php';
-        $view = ob_get_clean();
-        require LAYOUTS . '/' . str_replace('.', '/', $layout) . '.php';
-        die;
+        echo (new View(ViewEngine::DEFAULT, $view, $params))->run($layout);
     }
 
     protected function render(string $view, array $params = [], string $layout = 'index'): void
@@ -39,21 +30,26 @@ abstract class Controller
         }
     }
 
-    protected function setCode(string $code)
+    protected function setCode(string $code): void
     {
         header('HTTP/1.0 ' . $code);
     }
 
-    protected function page404()
+    protected function page404(): void
     {
         $this->setCode(HTTPCode::CODE_404);
         $this->render('app.404');
         die;
     }
 
-    protected function redirect(string $route, $params = [])
+    protected function redirect(string $route, $params = []): void
     {
         header('Location: ' . Kernel::get()->getRouter()->get($route, $params));
         die;
+    }
+
+    public function createEmail(): Email
+    {
+        return new Email();
     }
 }

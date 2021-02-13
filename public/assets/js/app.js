@@ -2,17 +2,18 @@ console.log('Bienvenue sur le framework MVC par NeutronStars.');
 
 function init()
 {
-    document.getElementById('route1').innerHTML = hljs.highlightAuto(route1).value;
-    document.getElementById('route2').innerHTML = hljs.highlightAuto(route2).value;
-    document.getElementById('route3').innerHTML = hljs.highlightAuto(route3).value;
-    document.getElementById('controller').innerHTML = hljs.highlightAuto(controller).value;
-    document.getElementById('layout').innerHTML = hljs.highlightAuto(layout).value;
-    document.getElementById('vue').innerHTML = hljs.highlightAuto(vue).value;
-    document.getElementById('model1').innerHTML = hljs.highlightAuto(model1).value;
-    document.getElementById('model2').innerHTML = hljs.highlightAuto(model2).value;
+    document.getElementById('route1').innerHTML = hljs.highlight('php',route1).value;
+    document.getElementById('route2').innerHTML = hljs.highlight('php', route2).value;
+    document.getElementById('route3').innerHTML = hljs.highlight('php', route3).value;
+    document.getElementById('controller').innerHTML = hljs.highlight('php', controller).value;
+    document.getElementById('layout').innerHTML = hljs.highlight('php', layout).value;
+    document.getElementById('vue').innerHTML = hljs.highlight('php', vue).value;
+    document.getElementById('model1').innerHTML = hljs.highlight('php', model1).value;
+    document.getElementById('model2').innerHTML = hljs.highlight('php', model2).value;
 }
 
-const route1 = 'use NeutronStars\\Kernel;\n' +
+const route1 = '```php\n' +
+    'use NeutronStars\\Kernel;\n' +
     '\n' +
     'Kernel::get()->getRouter()\n' +
     '    ->add(\'home\', [\n' +
@@ -22,7 +23,8 @@ const route1 = 'use NeutronStars\\Kernel;\n' +
     '    ->add(\'404\', [\n' +
     '        \'path\'       => \'/404\',\n' +
     '        \'controller\' => \'App\\\\Controller\\\\ErrorController#call404\'\n' +
-    '    ]);';
+    '    ]);\n' +
+    '```';
 
 const route2 = '$params = [\n' +
     '    /* L\'URL à entrer dans le navigateur. */\n' +

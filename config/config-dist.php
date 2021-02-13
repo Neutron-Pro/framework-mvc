@@ -1,5 +1,5 @@
 <?php
-
+use NeutronStars\Service\PHPMailer\PHPMailer;
 use NeutronStars\View\ViewEngine;
 
 define('BASE_PATH', '');
@@ -28,3 +28,12 @@ define('DB_PASSWORD', '');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_FETCH_MODE', PDO::FETCH_OBJ);
 define('DB_ERROR_MODE', PDO::ERRMODE_WARNING);
+
+/* Email Settings */
+define('MAIL_HOST', '');
+define('MAIL_USER', '');
+define('MAIL_PASSWORD', '');
+define('MAIL_PORT', '');
+define('MAIL_CHARSET', PHPMailer::CHARSET_UTF8);
+define('MAIL_RECIPIENT_EMAIL', '');
+define('MAIL_RECIPIENT_NAME', '');
