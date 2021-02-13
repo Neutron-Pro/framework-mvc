@@ -1,5 +1,4 @@
 <?php
-
 use NeutronStars\Service\PHPMailer\PHPMailer;
 use NeutronStars\View\ViewEngine;
 
@@ -11,10 +10,10 @@ define('BASE_PATH', '');
 define('VIEW_ENGINE', ViewEngine::DEFAULT);
 
 /* Layouts Folder */
-define('LAYOUTS', '../src/layouts');
+define('LAYOUTS', '../src/layouts/default');
 
 /* Views Folder */
-define('VIEWS', '../src/views');
+define('VIEWS', '../src/views/default');
 
 /* CACHE */
 define('BLADE_CACHE', '../cache');

@@ -12,11 +12,28 @@ git clone https://github.com/Neutron-Pro/frameword-mvc.git mvc-neutronstars
 
 - Copier le fichier `config-dist.php` dans le dossier `config` et coller le dans ce même dossier en le renommant `config.php`.
 ```php
+use NeutronStars\Service\PHPMailer\PHPMailer;
+use NeutronStars\View\ViewEngine;
+
+// Changer la base de l'url. Ne rien mettre si celui-ci ce trouve à la racine.
+// Exemple: '' => http(s)://sub.domain.ext/
+// Exemple: '/test' => http(s)://sub.domain.ext/test/
+define('BASE_PATH', '');
+
+/*
+ * Le moteur par défaut que vous souhaitez sélectionner:
+ * ViewEngine::DEFAULT ou ViewEngine::BLADE
+ */
+define('VIEW_ENGINE', ViewEngine::DEFAULT);
+
 // Changer la location si vous souhaitez déplacer le dossier des layouts.
 define('LAYOUTS', '../src/layouts');
 
 // Changer la location si vous souhaitez déplacer le dossier des vues.
 define('VIEWS', '../src/views');
+
+// Le cache de vos vues. (Uniquement pour le moteur de Blade)
+define('BLADE_CACHE', '../cache');
 
 // Configuration de la base de donnée. (Ce n'est pas obligatoire si vous ne l'utilisez pas.)
 // Le framework utilise une base de donnée SQL.
@@ -31,6 +48,26 @@ define('DB_USER', '');
 define('DB_PASSWORD', '');
 // Le jeu d'encodage des caractères.
 define('DB_CHARSET', 'utf8mb4');
+// Le type des résultats que vous souhaitez pour vos réponses.
+define('DB_FETCH_MODE', PDO::FETCH_OBJ);
+// Le mode d'erreur en cas de problème sur vos requêtes.
+define('DB_ERROR_MODE', PDO::ERRMODE_WARNING);
+
+// Configuration de PHPMailer. (Ce n'est pas obligatoire si vous ne souhaitez pas envoyer de mail.)
+// Le serveur de votre boite mail
+define('MAIL_HOST', '');
+// Le port du serveur de votre boite mail
+define('MAIL_PORT', '');
+// L'email qui servira à l'envoi.
+define('MAIL_USER', '');
+// Le mot de passe de l'email.
+define('MAIL_PASSWORD', '');
+// Le jeu de caractère dans les emails à envoyer.
+define('MAIL_CHARSET', PHPMailer::CHARSET_UTF8);
+// L'email qui sera affiché dans la section de l'expéditeur dans le mail du client. (Peut-être fictif)
+define('MAIL_RECIPIENT_EMAIL', '');
+// Le nom de l'expéditeur que le client verra.
+define('MAIL_RECIPIENT_NAME', '');
 ```
 
 Pensez à bien démarrer votre serveur vers le dossier `public`.
@@ -169,7 +206,82 @@ class ParentController extends Controller
 
 ---
 
-## Les layouts et les vues
+## Les layouts et les vues avec le moteur Blade
+
+Le layout est la partie qui est le plus courant de votre code HTML, Elle contiendra votre `head`, `body`, `header` et `footer`.
+Il ne faudra pas oublier d'ajouter le `@yield('content')` à l'endroit ou vous souhaitez que le rendu de votre vue se place.
+
+Toutes vos vues doivent avoir l'extension `blade.php` pour fonctionner.
+
+```html
+{{-- Le layout est une page blade placé dans votre dossier de layout. (Renseigné dans votre config) --}}
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>@hasSection('title') @yield('title') @else MVC Example By NeutronStars @endif</title>
+        <!-- Vos styles à injecter -->
+        @hasSection('style')
+            @yield('style')
+        @endSection
+        
+        <!-- Vos script à injecter -->
+        @hasSection('script')
+            @yield('script')
+        @endSection
+        <!-- Vos ressources 'link, script, ... à injecter par défault si besoin' -->
+    </head>
+    <body>
+        <!-- Votre menu -->
+        @hasSection('header')
+            @yield('header')
+        @else
+            @include('header')
+        @endif
+        
+        <!-- Coller le rendu de vos vues. -->
+        @yield('content')
+        
+        @hasSection('footer')
+            @yield('footer')
+        @endif
+    </body>
+</html>
+```
+
+Les vues est la partie la plus dense de votre site, c'est l'affichage qui change constamment d'une route à l'autre.
+Pour le cas de blade, il vous faudra aussi penser à inclure votre layout pour avoir la totalité de votre page.
+
+```html
+{{-- La vue est une page blade.php placé dans votre dossier de vue. (Renseigné dans votre config) --}}
+
+{{-- Pour inclure vos layouts, utilisez @include de blade et séparer les dossiers par des points et terminer par le nom du fichier sans mettre l'extension  --}}
+@include('app.index') {{-- {LAYOUTS}/app/index.blade.php --}}
+
+{{-- Puis pour rendre votre vue, utiliser la section content. --}}
+@addSection('content')
+<main>
+    {{-- Pour utiliser les paramètres injectés à votre vue: --}}
+    <h1>{{ $message }}</h1>
+    
+    {{-- Pour générer une de vos routes --}}
+    {{-- Il faut utiliser la directive @router et placer le nom de votre route --}}
+    <a href="@router('parent')">Le Parent</a>
+    
+    {{-- Si vous avez besoin de récupérer une route enfant à votre parent, il suffit de mettre les noms séparer par des points. --}}
+    <a href="@router('parent.child.subChild')">L'enfant</a>
+    
+    {{-- Si vous avez besoin de récupérer une route qui comporte des paramètres customisable: --}}
+    <a href="@router('parent.child2', ['slug' => 'test', 'id' => '101'])">L'enfant custom</a>
+</main>
+@endSection
+```
+
+---
+
+## Les layouts et les vues avec le moteur par défaut
 
 Le layout est la partie qui est le plus courant de votre code HTML, Elle contiendra votre `head`, `body`, `header` et `footer`.
 Il ne faudra pas oublier d'ajouter le `echo $view;` à l'endroit ou vous souhaitez que le rendu de votre vue se place.
@@ -278,6 +390,47 @@ class UserController extends Controller
   public function user($id){
     // Pour récupérer tous un utilisateur enregistré dans la base de donnée
     $user = $this->userModel->findById($id);
+  }
+}
+```
+
+---
+
+## Les envoies d'email
+
+Les envoies d'email sont assez important pour échanger avec client en dehors du site. Il est donc important de savoir envoyer des mails.
+Pour cela pensez à bien configurer la section email de votre config.
+
+```php
+namespace App\Controller;
+use NeutronStars\Controller\Controller;use NeutronStars\View\ViewEngine;
+
+class DefaultController extends Controller
+{
+  public function sendMail() {
+    //Pour envoyer un mail, utiliser la méthode createEmail du controller.
+    $this->createEmail()
+        // Ajouter tous vos destinataires en concaténant la méthode add les uns à la suites des autres.
+        ->add('email de votre destinataire 1', 'Le nom de votre destinataire 1')
+        ->add('email de votre destinataire 2', 'Le nom de votre destinataire 2')
+        //Puis envoyer votre email.
+        /*
+         * 1 = Le sujet du mail.
+         * 2 = Le contenu du mail. (Ou le chemin de la vue comme pour le render si vous utiliser un moteur de rendu.)
+         * 
+         * //A partir d'ici les arguments ne sont pas obligatoires.
+         * 3 = Les paramètre à donner à la vue si vous utilisez un moteur de rendu.
+         * 4 = Le layout pour le mode de rendu, sinon laissez à null. (Seulement le moteur de rendu par défaut)
+         * isHTML = Si le contenu est un rendu HTML. Si oui alors il vous faudra utiliser les vues. Par default c'est à true.
+         * viewEngine = Le moteur de rendu à utiliser. (Par défaut ça prend celui indiqué dans la configuration.)
+         */
+        ->send('1', '2', [3], '4', $isHTML, $viewEngine)
+        //Exemples:
+        ->send('Mon Sujet', 'mail.index', ['name' => 'John Doe'])
+        ->send('Mon Sujet', 'mail.index', ['name' => 'John Doe'], null, true, ViewEngine::BLADE)
+        ->send('Mon Sujet', 'mail.index', ['name' => 'John Doe'], null, true, ViewEngine::DEFAULT)
+        ->send('Mon Sujet', 'mail.index', ['name' => 'John Doe'], 'mail.layout.index', true, ViewEngine::DEFAULT)
+        ->send('Mon Sujet', 'Bonjour Mr John Doe !', [], null, false);
   }
 }
 ```
