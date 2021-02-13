@@ -2,17 +2,17 @@
 
 @section('content')
     <main class="container">
-        <div class="jumbotron">
+        <div class="alert">
             Le framework est correctement installé.
         </div>
 
         @if($send)
             @if($success)
-                <div class="jumbotron success">
+                <div class="alert success">
                     Le mail a bien été envoyé ! Veuillez regarder votre boite mail.
                 </div>
             @else
-                <div class="jumbotron error">
+                <div class="alert error">
                     Le mail n'a pas pu être envoyé. Vérifiez vos paramètres de configuration.
                 </div>
             @endif

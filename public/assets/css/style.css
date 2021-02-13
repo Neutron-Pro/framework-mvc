@@ -65,7 +65,7 @@ span{
     margin: auto;
 }
 
-.jumbotron{
+.alert{
     padding: 1rem;
     margin: 2rem 0;
     border-radius: .3rem;
@@ -73,12 +73,12 @@ span{
     font-style: italic;
 }
 
-.jumbotron.error{
+.alert.error{
     background-color: #d54141;
     color: white;
 }
 
-.jumbotron.success{
+.alert.success{
     background-color: #23a123;
     color: white;
 }

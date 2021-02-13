@@ -35,7 +35,8 @@ class DefaultController extends Controller
                     ]);
                 $success = true;
                 $validator->clearValues();
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
 
         $this->render('app.contact', [
