@@ -1,15 +1,15 @@
 <main class="container">
-    <div class="jumbotron">
+    <div class="alert">
         Le framework est correctement installé.
     </div>
 
     <?php if ($send) : ?>
         <?php if ($success) : ?>
-            <div class="jumbotron success">
+            <div class="alert success">
                 Le mail a bien été envoyé ! Veuillez regarder votre boite mail.
             </div>
         <?php else : ?>
-            <div class="jumbotron error">
+            <div class="alert error">
                 Le mail n'a pas pu être envoyé. Vérifiez vos paramètres de configuration.
             </div>
         <?php endif; ?>

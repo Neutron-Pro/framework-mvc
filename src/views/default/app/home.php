@@ -1,5 +1,5 @@
 <main class="container">
-    <div class="jumbotron">
+    <div class="alert">
         Le framework est correctement installé.
     </div>
     <h1>Bienvenue sur le framework MVC de NeutronStars !</h1>
