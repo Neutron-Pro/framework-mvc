@@ -1,4 +1,5 @@
 <?php
+
 use NeutronStars\Service\PHPMailer\PHPMailer;
 use NeutronStars\View\ViewEngine;
 

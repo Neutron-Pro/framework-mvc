@@ -5,7 +5,6 @@ namespace NeutronStars;
 use NeutronStars\Router\Router;
 use NeutronStars\Database\Database;
 use NeutronStars\View\Blade\BladeOne;
-
 use ReflectionException;
 use ReflectionMethod;
 

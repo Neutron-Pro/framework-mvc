@@ -3,7 +3,6 @@
 namespace NeutronStars\View;
 
 use NeutronStars\Kernel;
-
 use Exception;
 
 class View

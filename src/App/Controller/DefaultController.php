@@ -40,7 +40,8 @@ class DefaultController extends Controller
                         ]);
                     $success = true;
                     $values = [];
-                } catch (Exception $e) {}
+                } catch (Exception $e) {
+                }
             }
         }
 

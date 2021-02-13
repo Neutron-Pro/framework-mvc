@@ -1,4 +1,5 @@
 <?php
+
 namespace NeutronStars\Service\Form;
 
 /*
@@ -8,10 +9,8 @@ class FormValidator
 {
     const REQUIRE_AREA   = 'Ce champs est requis !';
     const NOT_VALID_AREA = 'Ce champs n\'est pas valide !';
-
     private array $errors = [];
     private array $values;
-
     public function __construct(array $inputs, array $validate)
     {
         $this->values = $this->xssCleanRecursive($inputs);
@@ -20,10 +19,10 @@ class FormValidator
 
     private function xssCleanRecursive(array $array): array
     {
-        foreach ($array as $key => $value){
-            if(is_string($value)){
+        foreach ($array as $key => $value) {
+            if (is_string($value)) {
                 $array[$key] = trim(htmlspecialchars($value));
-            }elseif (is_array($value)){
+            } elseif (is_array($value)) {
                 $array[$key] = $this->xssCleanRecursive($value);
             }
         }
@@ -32,30 +31,35 @@ class FormValidator
 
     private function validate(array $input, array $validate): void
     {
-        foreach ($validate as $key => $value)
-        {
-            switch ($value['type'] ?? 'text')
-            {
+        foreach ($validate as $key => $value) {
+            switch ($value['type'] ?? 'text') {
                 case 'text':
-                    $this->text($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               $this->text($input, $key, $value);
+
                     break;
                 case 'email':
-                    $this->email($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->email($input, $key, $value);
+
                     break;
                 case 'number':
-                    $this->number($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->number($input, $key, $value);
+
                     break;
                 case 'select':
-                    $this->selectValid($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->selectValid($input, $key, $value);
+
                     break;
                 case 'datetime':
-                    $this->date($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->date($input, $key, $value);
+
                     break;
                 case 'image':
-                    $this->image($input, $key, $value);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->image($input, $key, $value);
+
                     break;
                 default:
-                    $this->errors[$key] = 'Le type de donnée n\'est pas valide !';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->errors[$key] = 'Le type de donnée n\'est pas valide !';
+
                     break;
             }
         }
@@ -81,7 +85,7 @@ class FormValidator
     private function text(array $input, $key, array $value): void
     {
         $this->textValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->textValid($input, $k, $value);
             }
@@ -91,24 +95,24 @@ class FormValidator
     private function textValid(array $input, $key, array $value): void
     {
         $this->textLimit($this->getValueByArray($input, $key), $value['min'] ?? PHP_INT_MIN, $value['max'] ?? PHP_INT_MAX, $key, $value['require'] ?? true);
-        if(empty($this->errors[$key]) && isset($value['tronc']) && is_numeric($value['tronc']) && mb_strlen($this->values[$key]) > intval($value['tronc'])){
+        if (empty($this->errors[$key]) && isset($value['tronc']) && is_numeric($value['tronc']) && mb_strlen($this->values[$key]) > intval($value['tronc'])) {
             $this->values[$key] = mb_strstr($this->values[$key], 0, intval($value['tronc']));
         }
-        if(empty($this->errors[$key]) && isset($value['matches']) && !preg_match($value['matches'], $this->values[$key])){
+        if (empty($this->errors[$key]) && isset($value['matches']) && !preg_match($value['matches'], $this->values[$key])) {
             $this->errors[$key] = 'Cette valeur n\'est pas correct.';
         }
     }
 
     private function textLimit(?string $text, int $min, int $max, string $key, bool $require = true): void
     {
-        if(empty($text)){
-            if($require){
+        if (empty($text)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
-        }elseif(mb_strlen($text) < $min) {
-            $this->errors[$key] = 'Il n\'y a pas assez de caractère ! (min: '.$min.')';
-        }elseif(mb_strlen($text) > $max) {
-            $this->errors[$key] = 'Il y a trop de caractère ! (max: '.$max.')';
+        } elseif (mb_strlen($text) < $min) {
+            $this->errors[$key] = 'Il n\'y a pas assez de caractère ! (min: ' . $min . ')';
+        } elseif (mb_strlen($text) > $max) {
+            $this->errors[$key] = 'Il y a trop de caractère ! (max: ' . $max . ')';
         }
     }
 
@@ -116,7 +120,7 @@ class FormValidator
     private function email(array $input, $key, array $value): void
     {
         $this->emailValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->emailValid($input, $k, $value);
             }
@@ -130,11 +134,11 @@ class FormValidator
 
     private function emailLimit(?string $text, string $key, bool $require = true): void
     {
-        if(empty($text)){
-            if($require){
+        if (empty($text)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
-        }elseif(!filter_var($text, FILTER_VALIDATE_EMAIL)) {
+        } elseif (!filter_var($text, FILTER_VALIDATE_EMAIL)) {
             $this->errors[$key] = self::NOT_VALID_AREA;
         }
     }
@@ -144,7 +148,7 @@ class FormValidator
     private function number(array $input, $key, array $value): void
     {
         $this->numberValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->numberValid($input, $k, $value);
             }
@@ -158,18 +162,17 @@ class FormValidator
 
     private function numberLimit($value, int $min, int $max, $key, bool $require = true): void
     {
-        if(empty($value) && !is_int($value))
-        {
-            if($require){
+        if (empty($value) && !is_int($value)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
             return;
         }
         $value = intval($value);
-        if($value < $min) {
-            $this->errors[$key] = 'Le nombre est trop petit ! (min: '.$min.')';
-        }elseif ($value > $max) {
-            $this->errors[$key] = 'Le nombre est trop grand ! (max: '.$max.')';
+        if ($value < $min) {
+            $this->errors[$key] = 'Le nombre est trop petit ! (min: ' . $min . ')';
+        } elseif ($value > $max) {
+            $this->errors[$key] = 'Le nombre est trop grand ! (max: ' . $max . ')';
         }
     }
 
@@ -177,7 +180,7 @@ class FormValidator
     private function select(array $input, $key, array $value): void
     {
         $this->selectValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->selectValid($input, $k, $value);
             }
@@ -191,11 +194,11 @@ class FormValidator
 
     private function selectLimit(array $values, $value, $key, bool $require = true): void
     {
-        if(empty($value)){
-            if($require){
+        if (empty($value)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
-        }elseif (empty($values[$value])){
+        } elseif (empty($values[$value])) {
             $this->errors[$key] = self::NOT_VALID_AREA;
         }
     }
@@ -204,7 +207,7 @@ class FormValidator
     private function date(array $input, $key, array $value): void
     {
         $this->dateValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->dateValid($input, $k, $value);
             }
@@ -218,16 +221,16 @@ class FormValidator
 
     private function dateLimit(?string $value, $key, bool $require = true): void
     {
-        if(empty($value)){
-            if($require){
+        if (empty($value)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
             return;
         }
         $time = strtotime($value);
-        if(!$time) {
+        if (!$time) {
             $this->errors[$key] = self::NOT_VALID_AREA;
-        }elseif($time < time()) {
+        } elseif ($time < time()) {
             $this->errors[$key] = 'La date ne doit pas être inférieur à la date du jour !';
         }
     }
@@ -236,7 +239,7 @@ class FormValidator
     private function image(array $input, $key, array $value): void
     {
         $this->imageValid($input, $key, $value);
-        if(!empty($value['add'])){
+        if (!empty($value['add'])) {
             foreach ($value['add'] as $k) {
                 $this->imageValid($input, $k, $value);
             }
@@ -250,44 +253,44 @@ class FormValidator
 
     private function imageArrayLimit(?array $fileArray, int $maxSize, array $extensions, $key, bool $require = true): void
     {
-        if(empty($fileArray)){
-            if($require){
+        if (empty($fileArray)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
             return;
         }
-        if(!isset($fileArray['error']) || !is_numeric($fileArray['error'])
+        if (
+            !isset($fileArray['error']) || !is_numeric($fileArray['error'])
             || ($fileArray['error'] > 0 && $fileArray['error'] != 4)
             || (empty($fileArray['tmp_name']) && $fileArray['error'] != 4)
-        )
-        {
-            $this->errors[$key] = 'Une erreur est survenue le type d\'image ne doit pas être valide ! ('.implode(', ', $extensions).')';
+        ) {
+            $this->errors[$key] = 'Une erreur est survenue le type d\'image ne doit pas être valide ! (' . implode(', ', $extensions) . ')';
         }
         $this->imageLimit($fileArray['tmp_name'], $maxSize, $extensions, $key, $require);
     }
 
     private function imageLimit(?string $file, int $maxSize, array $extensions, $key, bool $require = true): void
     {
-        if(empty($file) || !file_exists($file)){
-            if($require){
+        if (empty($file) || !file_exists($file)) {
+            if ($require) {
                 $this->errors[$key] = self::REQUIRE_AREA;
             }
             return;
         }
-        if (filesize($file) > $maxSize){
-            $this->errors[$key] = 'L\'image ne doit pas excéder '.($maxSize/1000000).' Mo !';
-        }else{
+        if (filesize($file) > $maxSize) {
+            $this->errors[$key] = 'L\'image ne doit pas excéder ' . ($maxSize / 1000000) . ' Mo !';
+        } else {
             $mime = $this->getMIMEFile($file);
             $find = false;
-            foreach ($extensions as $extension){
-                if($mime == 'image/'.$extension){
+            foreach ($extensions as $extension) {
+                if ($mime == 'image/' . $extension) {
                     $find = true;
                     break;
                 }
             }
 
-            if(!$find){
-                $this->errors[$key] = 'L\'extension du fichier n\'est pas correct ! ('.implode(', ', $extensions).')';
+            if (!$find) {
+                $this->errors[$key] = 'L\'extension du fichier n\'est pas correct ! (' . implode(', ', $extensions) . ')';
             }
         }
     }
@@ -305,7 +308,8 @@ class FormValidator
      */
     function getMIMEFile(string $file): string
     {
-        $fileInfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+// return mime type ala mimetype extension
         $mime = finfo_file($fileInfo, $file);
         finfo_close($fileInfo);
         return $mime;
