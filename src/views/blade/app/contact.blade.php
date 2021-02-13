@@ -18,7 +18,7 @@
             @endif
         @endif
 
-        <h1>Me contacter</h1>
+        <h1>Envoyer un mail</h1>
         <div class="separator"></div>
             {!!
                  $form->addLabel('Nom *', 'name')

@@ -1,7 +1,8 @@
 <header>
     <nav>
         <ul>
-            <li><a href="<?=\NeutronStars\Kernel::get()->getRouter()->get('home', ['id' => $id])?>"><i class="fas fa-home"></i></a></li>
+            <li><a href="<?=$router->get('home')?>"><i class="fas fa-home"></i></a></li>
+            <li><a href="<?=$router->get('contact')?>"><i class="fas fa-envelope"></i></a></li>
         </ul>
     </nav>
     <div class="socials">
