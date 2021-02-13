@@ -26,6 +26,7 @@ use Redis;
  * @link     https://github.com/EFTEC/BladeOne
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
+
 const CACHEREDIS_SCOPEURL = 1;
 
 trait BladeOneCacheRedis

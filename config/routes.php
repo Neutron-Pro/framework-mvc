@@ -1,4 +1,5 @@
 <?php
+
 use NeutronStars\Kernel;
 
 Kernel::get()->getRouter()

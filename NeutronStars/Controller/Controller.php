@@ -13,7 +13,7 @@ abstract class Controller
     {
         $blade = new BladeOne([VIEWS, LAYOUTS], BLADE_CACHE);
         $blade->directive('router', function (string $query): string {
-            return '<?= $this->getRoute('.$query.') ?>';
+            return '<?= $this->getRoute(' . $query . ') ?>';
         });
         echo $blade->run($view, $params);
         die;

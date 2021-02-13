@@ -1,4 +1,5 @@
 <?php
+
 use NeutronStars\View\ViewEngine;
 
 define('BASE_PATH', '');

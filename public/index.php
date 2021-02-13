@@ -1,7 +1,9 @@
 <?php
+
 use NeutronStars\Loader;
 use NeutronStars\Kernel;
 use NeutronStars\Router\Router;
+
 require __DIR__ . '/../NeutronStars/Loader.php';
 Loader::load();
 Kernel::create(new Router($_SERVER['REQUEST_URI'] ?? '404', BASE_PATH));

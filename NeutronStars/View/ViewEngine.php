@@ -1,4 +1,5 @@
 <?php
+
 namespace NeutronStars\View;
 
 class ViewEngine

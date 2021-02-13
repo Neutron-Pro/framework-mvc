@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnusedParameterInspection */
+<?php
+
+/** @noinspection PhpUnusedParameterInspection */
 
 /** @noinspection SyntaxError
  * @noinspection ForgottenDebugOutputInspection
@@ -136,7 +138,7 @@ class BladeOne
      * @include("template",[]) // a1 is not defined
      * </pre>
      */
-    public $includeScope=false;
+    public $includeScope = false;
     /** @var callable Function used for resolving injected classes. */
     protected $injectResolver;
     /** @var array Used for conditional if. */
@@ -694,7 +696,7 @@ class BladeOne
     public function addAssetDict($name, $url = '')
     {
         if (\is_array($name)) {
-            if ($this->assetDict===null) {
+            if ($this->assetDict === null) {
                 $this->assetDict = $name;
             } else {
                 $this->assetDict = \array_merge($this->assetDict, $name);
@@ -1025,14 +1027,14 @@ class BladeOne
     {
         if (\is_array($variables)) {
             if ($this->includeScope) {
-                $backup=$this->variables;
+                $backup = $this->variables;
             } else {
-                $backup=null;
+                $backup = null;
             }
             $newVariables = \array_merge($this->variables, $variables);
         } else {
-            if ($variables===null) {
-                $newVariables=$this->variables;
+            if ($variables === null) {
+                $newVariables = $this->variables;
                 var_dump($newVariables);
                 die(1);
             }
@@ -1040,9 +1042,9 @@ class BladeOne
             $this->showError('run/include', "RunChild: Include/run variables should be defined as array ['idx'=>'value']", true);
             return '';
         }
-        $r=$this->runInternal($view, $newVariables, false, false, $this->isRunFast);
-        if ($backup!==null) {
-            $this->variables=$backup;
+        $r = $this->runInternal($view, $newVariables, false, false, $this->isRunFast);
+        if ($backup !== null) {
+            $this->variables = $backup;
         }
         return $r;
     }
@@ -1138,8 +1140,10 @@ class BladeOne
      */
     protected function wildCardComparison($text, $textWithWildcard)
     {
-        if (($textWithWildcard === null && $textWithWildcard === '')
-            || strpos($textWithWildcard, '*') === false) {
+        if (
+            ($textWithWildcard === null && $textWithWildcard === '')
+            || strpos($textWithWildcard, '*') === false
+        ) {
             // if the text with wildcard is null or empty or it contains two ** or it contains no * then..
             return $text == $textWithWildcard;
         }
@@ -1500,8 +1504,10 @@ class BladeOne
 
     public function ipClient()
     {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-            && \preg_match('/^([d]{1,3}).([d]{1,3}).([d]{1,3}).([d]{1,3})$/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        if (
+            isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+            && \preg_match('/^([d]{1,3}).([d]{1,3}).([d]{1,3}).([d]{1,3})$/', $_SERVER['HTTP_X_FORWARDED_FOR'])
+        ) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
@@ -2040,9 +2046,9 @@ class BladeOne
         //echo "<hr>render<br>";
         $name = \array_pop($this->componentStack);
         //return $this->runChild($name, $this->componentData());
-        $cd=$this->componentData();
-        $clean=array_keys($cd);
-        $r=$this->runChild($name, $cd);
+        $cd = $this->componentData();
+        $clean = array_keys($cd);
+        $r = $this->runChild($name, $cd);
         // we clean variables defined inside the component (so they are garbaged when the component is used)
         foreach ($clean as $key) {
             unset($this->variables[$key]);
@@ -2057,7 +2063,7 @@ class BladeOne
      */
     protected function componentData()
     {
-        $cs=count($this->componentStack);
+        $cs = count($this->componentStack);
         //echo "<hr>";
         //echo "<br>data:<br>";
         //var_dump($this->componentData);
@@ -2635,10 +2641,10 @@ class BladeOne
         if (!$text || strlen($text) < 2) {
             return $text;
         }
-        $text=trim($text);
-        $p0=$text[0];
-        $p1=\substr($text, -1);
-        if ($p0===$p1 && ($p0==='"' || $p0==="'")) {
+        $text = trim($text);
+        $p0 = $text[0];
+        $p1 = \substr($text, -1);
+        if ($p0 === $p1 && ($p0 === '"' || $p0 === "'")) {
             return \substr($text, 1, -1);
         }
         return $text;
@@ -3000,9 +3006,9 @@ class BladeOne
         for ($i = $c; $i >= 1; $i--) {
             $r = @explode(':', $array[$i], 2);
             $fnName = trim($r[0]);
-            $fnNameF=$fnName[0]; // first character
+            $fnNameF = $fnName[0]; // first character
             if ($fnNameF === '"' || $fnNameF === '\'' || $fnNameF === '$' || is_numeric($fnNameF)) {
-                $fnName='!isset('.$array[0].') ? '.$fnName.' : ';
+                $fnName = '!isset(' . $array[0] . ') ? ' . $fnName . ' : ';
             } else {
                 if (isset($this->customDirectives[$fnName])) {
                     $fnName = '$this->customDirectives[\'' . $fnName . '\']';
@@ -3081,7 +3087,7 @@ class BladeOne
     protected function compileSet($expression)
     {
         //$segments = \explode('=', \preg_replace("/[()\\\']/", '', $expression));
-        $segments=\explode('=', $this->stripParentheses($expression));
+        $segments = \explode('=', $this->stripParentheses($expression));
         $value = (\count($segments) >= 2) ? '=@' . $segments[1] : '++';
         return $this->phpTag . \trim($segments[0]) . $value . ';?>';
     }

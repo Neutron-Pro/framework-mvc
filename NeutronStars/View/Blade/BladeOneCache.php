@@ -1,4 +1,7 @@
-<?php /** @noinspection TypeUnsafeComparisonInspection */
+<?php
+
+/** @noinspection TypeUnsafeComparisonInspection */
+
 /** @noinspection PhpUnused */
 
 /** @noinspection DuplicatedCode */
@@ -77,7 +80,7 @@ trait BladeOneCache
      */
     public function setCacheLog($file)
     {
-        $this->cacheLog=$file;
+        $this->cacheLog = $file;
     }
 
     public function writeCacheLog($txt, $nivel)
@@ -90,22 +93,22 @@ trait BladeOneCache
             $txt = print_r($txt, true);
         }
         // Rewrite file if more than 100000 bytes
-        $mode=($fz > 100000) ? 'w':'a';
+        $mode = ($fz > 100000) ? 'w' : 'a';
         $fp = fopen($this->cacheLog, $mode);
         if ($fp === false) {
             return;
         }
         switch ($nivel) {
             case 1:
-                $txtNivel='expired';
+                $txtNivel = 'expired';
                 break;
             case 2:
-                $txtNivel='new';
+                $txtNivel = 'new';
                 break;
             default:
-                $txtNivel='other';
+                $txtNivel = 'other';
         }
-        $txtarg=json_encode($this->cacheUniqueGUID(false));
+        $txtarg = json_encode($this->cacheUniqueGUID(false));
         fwrite($fp, date('c') . "\t$txt\t$txtNivel\t$txtarg\n");
         fclose($fp);
     }
@@ -154,17 +157,17 @@ trait BladeOneCache
                 $r = null;
         }
         if ($this->cacheStrategyIndex === null || !is_array($r)) {
-            $r= serialize($r);
+            $r = serialize($r);
         } else {
-            $copy=[];
+            $copy = [];
             foreach ($r as $key => $item) {
                 if (in_array($key, $this->cacheStrategyIndex, true)) {
-                    $copy[$key]=$item;
+                    $copy[$key] = $item;
                 }
             }
-            $r=serialize($copy);
+            $r = serialize($copy);
         }
-        return $serialize===true ? md5($r): $r;
+        return $serialize === true ? md5($r) : $r;
     }
 
     public function compileCache($expression)
@@ -212,8 +215,8 @@ trait BladeOneCache
     public function runCache($view, $variables = [], $ttl = 86400)
     {
         $this->cachePageRunning = true;
-        $cacheStatus=$this->cachePageExpired($view, $ttl);
-        if ($cacheStatus!==0) {
+        $cacheStatus = $this->cachePageExpired($view, $ttl);
+        if ($cacheStatus !== 0) {
             $this->writeCacheLog($view, $cacheStatus);
             $this->cacheStart('_page_', $ttl);
             $content = $this->run($view, $variables); // if no cache, then it runs normally.
@@ -297,7 +300,7 @@ trait BladeOneCache
             $compiledFile = $this->getCompiledFile() . '_cache' . $this->curCacheId;
         }
 
-        if ($this->cacheExpired('', $id, $cacheDuration) !==0) {
+        if ($this->cacheExpired('', $id, $cacheDuration) !== 0) {
             $this->cacheRunning = false;
         } else {
             $this->cacheRunning = true;

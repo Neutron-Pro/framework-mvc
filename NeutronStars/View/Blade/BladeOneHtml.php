@@ -1,4 +1,7 @@
-<?php /** @noinspection HtmlUnknownTarget */
+<?php
+
+/** @noinspection HtmlUnknownTarget */
+
 /** @noinspection HtmlUnknownAttribute */
 /** @noinspection PhpFullyQualifiedNameUsageInspection */
 
@@ -497,15 +500,15 @@ trait BladeOneHtml
         }
         return $result;
     }
-    protected $paginationStructure=['selHtml'=>'<li class="selected" %3s><a href="%1s">%2s</a></li>'
-                                    ,'html'=>'<li %3s><a href="%1s">%2s</a></li>'
-                                    ,'maxItem'=>5
-                                    ,'url'=>''];
-    public function pagination($id, $curPage, $maxPage, $baseUrl, $extra='')
+    protected $paginationStructure = ['selHtml' => '<li class="selected" %3s><a href="%1s">%2s</a></li>'
+                                    ,'html' => '<li %3s><a href="%1s">%2s</a></li>'
+                                    ,'maxItem' => 5
+                                    ,'url' => ''];
+    public function pagination($id, $curPage, $maxPage, $baseUrl, $extra = '')
     {
-        $r="<ul $extra>";
+        $r = "<ul $extra>";
 
-        $r.="</ul>";
+        $r .= "</ul>";
         return $r;
     }
 
