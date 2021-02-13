@@ -11,6 +11,16 @@ Kernel::get()->getRouter()
         'path'       => '/contact',
         'controller' => 'App\\Controller\\DefaultController#contact'
     ])
+    ->add('api', [
+        'path'       => '/api',
+        'controller' => 'App\\Controller\\APIController#index',
+        'children'   => [
+            'readme' => [
+                'path'       => '/readme',
+                'controller' => 'App\\Controller\\APIController#readme'
+            ]
+        ]
+    ])
     ->add('404', [
         'path'       => '/404',
         'controller' => 'App\\Controller\\ErrorController#call404'

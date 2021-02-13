@@ -54,8 +54,11 @@ main h1 {
     font-size: 2rem;
 }
 
-span{
-    color: #238fe2;
+hr{
+    background-color: #5c5c5c;
+    border-radius: 50%;
+    height: .3rem;
+    margin: 3rem 1rem;
 }
 
 .container{
@@ -83,27 +86,16 @@ span{
     color: white;
 }
 
-.separator{
-    background-color: #5c5c5c;
-    border-radius: 50%;
-    height: .3rem;
-    margin: 3rem 1rem;
-}
-
-section{
-    margin: 1rem 0;
-}
-
-h2{
-    margin-bottom: 1rem;
-}
-
-.code {
+pre {
     background-color: #1f1f1f;
     color: white;
     padding: 1rem;
     margin: 1rem;
     overflow-x: auto;
+}
+
+p > code, li > code {
+    color: #23a123;
 }
 
 form > * {
@@ -135,4 +127,20 @@ form .error {
 
 form .error + * {
     border: 2px solid #d54141;
+}
+
+.error-404{
+    text-align: center;
+    font-size: 10rem;
+    font-weight: 700;
+}
+
+.error-404 + p {
+    text-align: center;
+    font-style: italic;
+    font-size: 2rem;
+}
+
+.error-404 + p > span{
+    color: #d54141;
 }

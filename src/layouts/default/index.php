@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
         <link rel="stylesheet" href="/assets/css/highlightjs.css">
         <link rel="stylesheet" href="/assets/css/style.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script src="/assets/js/highlightjs.js"></script>
         <script src="/assets/js/app.js" defer></script>
     </head>

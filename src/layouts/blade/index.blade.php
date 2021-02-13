@@ -18,6 +18,7 @@
         @hasSection('script')
             @yield('script')
         @else
+            <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
             <script src="/assets/js/highlightjs.js"></script>
             <script src="/assets/js/app.js" defer></script>
         @endif

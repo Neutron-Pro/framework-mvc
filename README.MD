@@ -8,10 +8,14 @@
 git clone https://github.com/Neutron-Pro/frameword-mvc.git mvc-neutronstars
 ```
 
+---
+
 ## Configuration du framework
 
 - Copier le fichier `config-dist.php` dans le dossier `config` et coller le dans ce même dossier en le renommant `config.php`.
+
 ```php
+
 use NeutronStars\Service\PHPMailer\PHPMailer;
 use NeutronStars\View\ViewEngine;
 
@@ -68,9 +72,12 @@ define('MAIL_CHARSET', PHPMailer::CHARSET_UTF8);
 define('MAIL_RECIPIENT_EMAIL', '');
 // Le nom de l'expéditeur que le client verra.
 define('MAIL_RECIPIENT_NAME', '');
+
 ```
 
 Pensez à bien démarrer votre serveur vers le dossier `public`.
+
+---
 
 ## Démarrer le serveur avec PHP
 
