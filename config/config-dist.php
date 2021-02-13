@@ -1,13 +1,21 @@
 <?php
+use NeutronStars\View\ViewEngine;
 
-/* URL BASE (Empty recommended) */
 define('BASE_PATH', '');
+
+/*
+ * ViewEngine::DEFAULT OR ViewEngine::BLADE
+ */
+define('VIEW_ENGINE', ViewEngine::DEFAULT);
 
 /* Layouts Folder */
 define('LAYOUTS', '../src/layouts');
 
 /* Views Folder */
 define('VIEWS', '../src/views');
+
+/* CACHE */
+define('BLADE_CACHE', '../cache');
 
 /* DATABASE */
 define('DB_HOST', '127.0.0.1');

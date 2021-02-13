@@ -197,3 +197,4 @@ $RECYCLE.BIN/
 
 # Project ignore
 config/config.php
+cache/
