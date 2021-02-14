@@ -13,3 +13,4 @@ if (app) {
     request.open('GET','/api/readme');
     request.send();
 }
+console.log('Bienvenue sur le Framework MVC de NeutronStars !');

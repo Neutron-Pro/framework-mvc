@@ -1424,6 +1424,16 @@ class BladeOne
         return $this->router->get($name, $params);
     }
 
+    protected function isRoute(string $name, bool $strict = true): bool
+    {
+        return $this->router->isRoute($name, $strict);
+    }
+
+    public function getClassRoute(string $name, string $class = 'selected', bool $strict = true): string
+    {
+        return $this->isRoute($name, $strict) ? $class : '';
+    }
+
     /**
      * @param array $views array of views
      * @param array $value

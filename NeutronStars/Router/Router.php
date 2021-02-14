@@ -71,4 +71,13 @@ class Router
         }
         return $this->pathBase . '/';
     }
+
+    public function isRoute(string $name, bool $strict = true): bool
+    {
+        $split = explode('.', $name);
+        if (!empty($this->routes[$split[0]])) {
+            return $this->routes[$split[0]]->isRoute(array_slice($split, 1), $strict);
+        }
+        return false;
+    }
 }

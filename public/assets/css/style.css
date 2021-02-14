@@ -26,7 +26,7 @@ header {
     color: white;
     display: flex;
     justify-content: space-between;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 header .socials{
@@ -46,12 +46,16 @@ header li a{
     padding: 1rem;
 }
 
-header li a:hover {
+header li a.link, header li a:hover {
     background-color: #5c5c5c;
 }
 
 main h1 {
     font-size: 2rem;
+}
+
+main h2 {
+    margin-bottom: 1rem;
 }
 
 hr{
@@ -89,9 +93,10 @@ hr{
 pre {
     background-color: #1f1f1f;
     color: white;
-    padding: 1rem;
-    margin: 1rem;
+    padding: 2rem;
+    margin: 2rem 0;
     overflow-x: auto;
+    border-radius: 1rem;
 }
 
 p > code, li > code {
@@ -143,4 +148,19 @@ form .error + * {
 
 .error-404 + p > span{
     color: #d54141;
+}
+
+::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: none;
+    border-radius: 2rem;
 }

@@ -56,6 +56,12 @@ class Kernel
             $this->bladeOne->directive('router', function (string $query): string {
                 return '<?= $this->getRoute(' . $query . ') ?>';
             });
+            $this->getBlade()->directive('isRoute', function (string $query):string {
+                return '<?php if($this->isRoute('.$query.')): ?>';
+            });
+            $this->getBlade()->directive('classRoute', function (string $query): string {
+                return '<?= $this->getClassRoute('.$query.') ?>';
+            });
         }
         return $this->bladeOne;
     }
@@ -69,6 +75,7 @@ class Kernel
     {
         $route = $this->router->find($params);
         if ($route != null) {
+            $route->setSelected(true);
             $reflection = new ReflectionMethod($route->getController(), $route->getCallMethod());
             $reflection->invoke($route->getController(), ...$params);
         }

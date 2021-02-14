@@ -15,6 +15,9 @@ class Route
     private string $name;
     private string $path;
     private array $params;
+
+    private bool $selected = false;
+
     public function __construct(string $name, string $path, Controller $controller, string $callMethod, array $params)
     {
         $this->name = $name;
@@ -55,6 +58,16 @@ class Route
     public function getParams(): array
     {
         return $this->params;
+    }
+
+    public function isSelected(): bool
+    {
+        return $this->selected;
+    }
+
+    public function setSelected(bool $selected): void
+    {
+        $this->selected = $selected;
     }
 
     public function add(Route $route)
@@ -135,5 +148,32 @@ class Route
             $path .= $build;
         }
         return $path;
+    }
+
+    private function hasSelected(): bool
+    {
+        if(!$this->selected) {
+            foreach ($this->routes as $route) {
+                if ($route->hasSelected()) {
+                    return true;
+                }
+            }
+        }
+        return $this->selected;
+    }
+
+    public function isRoute(array $name, bool $strict = true): bool
+    {
+        if (empty($name)) {
+            $selected = $this->selected;
+            if (!$selected && !$strict) {
+                $selected = $this->hasSelected();
+            }
+            return $selected;
+        }
+        if (!empty($this->routes[$name[0]])) {
+            return $this->routes[$name[0]]->isRoute(array_slice($name, 1), $strict);
+        }
+        return false;
     }
 }
