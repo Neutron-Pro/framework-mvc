@@ -78,6 +78,10 @@ class FormValidator
                     break;
             }
         }
+
+        if ($csrf && $this->isValid()) {
+            unset($_SESSION['_token_csrf']);
+        }
     }
 
     public function getValues(): array
