@@ -13,12 +13,12 @@ class FormValidator
     private array $values = [];
     private bool $submitted = false;
 
-    public function __construct(array $inputs, array $validate)
+    public function __construct(array $inputs, array $validate, bool $csrf = true)
     {
         if (!empty($inputs)) {
             $this->submitted = true;
             $this->values = $this->xssCleanRecursive($inputs);
-            $this->validate($this->values, $validate);
+            $this->validate($this->values, $validate, $csrf);
         }
     }
 
@@ -39,37 +39,42 @@ class FormValidator
         return $this->submitted;
     }
 
-    private function validate(array $input, array $validate): void
+    protected function getTokenCSRF(): ?string
     {
+        return $_SESSION['_token_csrf'] ?? null;
+    }
+
+    private function validate(array $input, array $validate, bool $csrf): void
+    {
+        if ($csrf) {
+            if (empty($input['__token-csrf']) || $input['__token-csrf'] !== $this->getTokenCSRF()) {
+                $this->errors['__token-csrf'] = 'Le token CSRF n\'est pas valide !';
+                return;
+            }
+        }
+
         foreach ($validate as $key => $value) {
             switch ($value['type'] ?? 'text') {
                 case 'text':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               $this->text($input, $key, $value);
-
+                    $this->text($input, $key, $value);
                     break;
                 case 'email':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->email($input, $key, $value);
-
+                    $this->email($input, $key, $value);
                     break;
                 case 'number':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->number($input, $key, $value);
-
+                    $this->number($input, $key, $value);
                     break;
                 case 'select':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->selectValid($input, $key, $value);
-
+                    $this->selectValid($input, $key, $value);
                     break;
                 case 'datetime':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->date($input, $key, $value);
-
+                    $this->date($input, $key, $value);
                     break;
                 case 'image':
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->image($input, $key, $value);
-
+                    $this->image($input, $key, $value);
                     break;
                 default:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       $this->errors[$key] = 'Le type de donnée n\'est pas valide !';
-
+                    $this->errors[$key] = 'Le type de donnée n\'est pas valide !';
                     break;
             }
         }

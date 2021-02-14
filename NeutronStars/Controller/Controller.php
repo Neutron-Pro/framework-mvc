@@ -2,8 +2,8 @@
 
 namespace NeutronStars\Controller;
 
-use NeutronStars\ContentType;
-use NeutronStars\HTTPCode;
+use NeutronStars\Service\ContentType;
+use NeutronStars\Service\HTTPCode;
 use NeutronStars\Kernel;
 use NeutronStars\Service\PHPMailer\Email;
 use NeutronStars\View\View;
@@ -71,7 +71,7 @@ abstract class Controller
         die;
     }
 
-    public function createEmail(): Email
+    protected function createEmail(): Email
     {
         return new Email();
     }

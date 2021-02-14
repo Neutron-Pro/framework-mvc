@@ -7,11 +7,25 @@ class FormBuilder
     private string $formHTML;
     private array $values;
     private array $errors;
-    public function __construct(array $values = [], array $errors = [], string $action = '', string $method = 'POST')
+
+    public function __construct(array $values = [], array $errors = [], string $action = '', string $method = 'POST', bool $csrf = true)
     {
         $this->formHTML = '<form action="' . $action . '" method="' . $method . '">';
         $this->values = $values;
         $this->errors = $errors;
+        $this->addCSRF($csrf);
+    }
+
+    protected function addCSRF(bool $csrf): void
+    {
+        if (!$csrf) {
+            return;
+        }
+        if (!empty($this->errors['__token-csrf'])) {
+            $this->formHTML .= '<div class="form-error">'.$this->errors['__token-csrf'].'</div>';
+            return;
+        }
+        $this->formHTML .= '<input name="__token-csrf" type="hidden" value="' . $this->createTokenCSRF() . '" />';
     }
 
     public function addLabel(string $name, string $for): self
@@ -61,6 +75,17 @@ class FormBuilder
     private function getValue(string $key): string
     {
         return !empty($this->values[$key]) ? $this->values[$key] : '';
+    }
+
+    protected function createTokenCSRF(): string
+    {
+        $_SESSION['_token_csrf'] = md5(uniqid().mt_rand());
+        return $this->getTokenCSRF();
+    }
+
+    protected function getTokenCSRF(): ?string
+    {
+        return $_SESSION['_token_csrf'] ?? null;
     }
 
     public function __toString(): string

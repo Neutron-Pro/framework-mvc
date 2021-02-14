@@ -6,6 +6,7 @@ class Loader
 {
     public static function load(): void
     {
+        session_start();
         spl_autoload_register(function ($class) {
             if (strpos($class, 'NeutronStars') === 0) {
                 require str_replace('\\', DIRECTORY_SEPARATOR, '..' . DIRECTORY_SEPARATOR . $class) . '.php';

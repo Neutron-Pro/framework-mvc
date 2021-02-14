@@ -72,7 +72,7 @@ hr{
     margin: auto;
 }
 
-.alert{
+.alert, div.form-error{
     padding: 1rem;
     margin: 2rem 0;
     border-radius: .3rem;
@@ -80,7 +80,7 @@ hr{
     font-style: italic;
 }
 
-.alert.error{
+.alert.error, div.form-error{
     background-color: #d54141;
     color: white;
 }

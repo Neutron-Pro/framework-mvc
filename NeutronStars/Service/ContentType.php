@@ -1,5 +1,5 @@
 <?php
-namespace NeutronStars;
+namespace NeutronStars\Service;
 
 
 class ContentType
