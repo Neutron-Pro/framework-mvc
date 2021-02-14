@@ -104,6 +104,11 @@ class FormValidator
         return empty($this->errors);
     }
 
+    public function addError(string $key, string $value)
+    {
+        $this->errors[$key] = $value;
+    }
+
     /* VALIDATOR TEXT */
 
     private function text(array $input, $key, array $value): void

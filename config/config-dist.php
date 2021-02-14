@@ -4,6 +4,8 @@ use NeutronStars\View\ViewEngine;
 
 define('BASE_PATH', '');
 
+define('DOMAIN_URL', 'http://localhost');
+
 /*
  * ViewEngine::DEFAULT OR ViewEngine::BLADE
  */
@@ -37,3 +39,8 @@ define('MAIL_PORT', '');
 define('MAIL_CHARSET', PHPMailer::CHARSET_UTF8);
 define('MAIL_RECIPIENT_EMAIL', '');
 define('MAIL_RECIPIENT_NAME', '');
+
+/* User Settings */
+define('USER_ENTITY', 'App\\Entity\\User');
+define('USER_LOADER', 'App\\Service\\Authentification');
+define('USER_TIMEOUT', 86400);

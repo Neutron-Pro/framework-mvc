@@ -2,6 +2,8 @@
 
 namespace NeutronStars\Router;
 
+use NeutronStars\Entity\UserInterface;
+
 class Router
 {
     /**
@@ -39,20 +41,21 @@ class Router
     final private function createRecursive($name, array $array): Route
     {
         $controllerInfo = explode('#', $array['controller']);
-        $route = new Route($name, $array['path'], new $controllerInfo[0](), $controllerInfo[1], $array['params'] ?? []);
+        $route = new Route($name, $array['path'], $controllerInfo[0], $controllerInfo[1] ?? null,
+            $array['params'] ?? [], $array['roles'] ?? []);
         foreach (($array['children'] ?? []) as $key => $value) {
             $route->add($this->createRecursive($key, $value));
         }
         return $route;
     }
 
-    final public function find(&$params): ?Route
+    final public function find(&$params, UserInterface $user): ?Route
     {
         if ($params == null) {
             $params = [];
         }
         foreach ($this->routes as $route) {
-            $checkRoute = $route->get($this->path, $params);
+            $checkRoute = $route->get($this->path, $params, $user);
             if ($checkRoute != null) {
                 return $checkRoute;
             }
@@ -60,16 +63,16 @@ class Router
         return $this->routes['404'];
     }
 
-    final public function get(string $name, array $params = []): string
+    final public function get(string $name, array $params = [], $fullPath = false): string
     {
         $split = explode('.', $name);
         if (!empty($this->routes[$split[0]])) {
             $build = $this->routes[$split[0]]->buildPath(array_slice($split, 1), $params);
             if ($build != null) {
-                return $this->pathBase . $build;
+                return ($fullPath ? DOMAIN_URL : '').$this->pathBase . $build;
             }
         }
-        return $this->pathBase . '/';
+        return ($fullPath ? DOMAIN_URL : '').$this->pathBase . '/';
     }
 
     public function isRoute(string $name, bool $strict = true): bool

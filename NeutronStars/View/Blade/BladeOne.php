@@ -28,6 +28,7 @@ use Closure;
 use Countable;
 use Exception;
 use InvalidArgumentException;
+use NeutronStars\Entity\UserInterface;
 use NeutronStars\Kernel;
 use NeutronStars\Router\Router;
 
@@ -1419,9 +1420,14 @@ class BladeOne
         return \ltrim(\ob_get_clean());
     }
 
-    protected function getRoute(string $name, array $params = []): string
+    protected function getRoute(string $name, array $params = [], bool $fullPath = false): string
     {
-        return $this->router->get($name, $params);
+        return $this->router->get($name, $params, $fullPath);
+    }
+
+    protected function getUser(): UserInterface
+    {
+        return Kernel::get()->getUser();
     }
 
     protected function isRoute(string $name, bool $strict = true): bool

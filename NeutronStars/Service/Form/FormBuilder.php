@@ -22,10 +22,15 @@ class FormBuilder
             return;
         }
         if (!empty($this->errors['__token-csrf'])) {
-            $this->formHTML .= '<div class="form-error">'.$this->errors['__token-csrf'].'</div>';
+            $this->addAlert($this->errors['__token-csrf']);
             return;
         }
         $this->formHTML .= '<input name="__token-csrf" type="hidden" value="' . $this->createTokenCSRF() . '" />';
+    }
+
+    public function addAlert(string $alert, bool $success = false): void
+    {
+        $this->formHTML .= '<div class="'.($success ? 'form-success' : 'form-error').'">'.$alert.'</div>';
     }
 
     public function addLabel(string $name, string $for): self

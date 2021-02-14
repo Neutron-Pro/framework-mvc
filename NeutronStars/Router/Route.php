@@ -3,6 +3,7 @@
 namespace NeutronStars\Router;
 
 use NeutronStars\Controller\Controller;
+use NeutronStars\Entity\UserInterface;
 
 class Route
 {
@@ -10,21 +11,24 @@ class Route
      * @var Route[]
      */
     private array $routes = [];
-    private Controller $controller;
+    private string $controller;
     private string $callMethod;
     private string $name;
     private string $path;
     private array $params;
+    private array $roles;
 
     private bool $selected = false;
 
-    public function __construct(string $name, string $path, Controller $controller, string $callMethod, array $params)
+    public function __construct(string $name, string $path, string $controller,
+                                ?string $callMethod, array $params, array $roles)
     {
         $this->name = $name;
         $this->path = $path;
         $this->controller = $controller;
-        $this->callMethod = $callMethod;
+        $this->callMethod = $callMethod ?? 'index';
         $this->params = $params;
+        $this->roles = $roles;
     }
 
     public function getName(): string
@@ -47,7 +51,7 @@ class Route
 
     public function getController(): Controller
     {
-        return $this->controller;
+        return new $this->controller();
     }
 
     public function getCallMethod(): string
@@ -75,10 +79,13 @@ class Route
         $this->routes[$route->getName()] = $route;
     }
 
-    public function get($path, array &$params): ?Route
+    public function get($path, array &$params, UserInterface $user): ?Route
     {
         if ($this->path === $path) {
-            return $this;
+            if (empty($this->roles) || $user->hasRoles(...$this->roles)) {
+                return $this;
+            }
+            return null;
         }
         if (count($this->params) > 0) {
             $hash = explode('/', ltrim($path, '/'))[0];
@@ -103,11 +110,14 @@ class Route
             if ('/' . $hash === $pathFormat) {
                 $params = $buildParams;
                 if (count(explode('/', ltrim($path, '/'))) === 1) {
-                    return $this;
+                    if (empty($this->roles) || $user->hasRoles(...$this->roles)) {
+                        return $this;
+                    }
+                    return null;
                 }
                 $path = substr_replace($path, '', 0, strlen('/' . $hash));
                 foreach ($this->routes as $route) {
-                    $checkRoute = $route->get($path, $params);
+                    $checkRoute = $route->get($path, $params, $user);
                     if ($checkRoute != null) {
                         return $checkRoute;
                     }
@@ -118,7 +128,7 @@ class Route
         if (strpos($path, $this->path) === 0) {
             $path = substr_replace($path, '', 0, strlen($this->path));
             foreach ($this->routes as $route) {
-                $checkRoute = $route->get($path, $params);
+                $checkRoute = $route->get($path, $params, $user);
                 if ($checkRoute != null) {
                     return $checkRoute;
                 }

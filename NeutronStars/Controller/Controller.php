@@ -2,6 +2,7 @@
 
 namespace NeutronStars\Controller;
 
+use NeutronStars\Entity\UserInterface;
 use NeutronStars\Service\ContentType;
 use NeutronStars\Service\HTTPCode;
 use NeutronStars\Kernel;
@@ -74,5 +75,19 @@ abstract class Controller
     protected function createEmail(): Email
     {
         return new Email();
+    }
+
+    protected function getUser(): UserInterface
+    {
+        return Kernel::get()->getUser();
+    }
+
+    public function connectUser($id) {
+        Kernel::get()->connectUser($id);
+    }
+
+    protected function disconnectUser(): void
+    {
+        Kernel::get()->disconnectUser();
     }
 }

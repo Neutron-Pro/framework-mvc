@@ -40,19 +40,20 @@ class View
      */
     private function renderBlade(): string
     {
-        return Kernel::get()->getBlade()->run($this->viewPath, $this->params);
+        return Kernel::get()->getBlade()->run($this->viewPath, $this->params+['auth' => Kernel::get()->getUser()]);
     }
 
     private function renderDefault(?string $layout = null): string
     {
         $this->params['router'] = Kernel::get()->getRouter();
+        $this->params['auth'] = Kernel::get()->getUser();
         ob_start();
         extract($this->params);
-        require VIEWS . '/' . str_replace('.', '/', $this->viewPath) . '.php';
+        include VIEWS . '/' . str_replace('.', '/', $this->viewPath) . '.php';
         $view = ob_get_clean();
         if ($layout !== null) {
             ob_start();
-            require LAYOUTS . '/' . str_replace('.', '/', $layout) . '.php';
+            include LAYOUTS . '/' . str_replace('.', '/', $layout) . '.php';
             $view = ob_get_clean();
         }
         return $view;

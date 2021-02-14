@@ -58,7 +58,7 @@ main h2 {
     margin-bottom: 1rem;
 }
 
-hr{
+hr, .separator{
     background-color: #5c5c5c;
     border-radius: 50%;
     height: .3rem;
@@ -72,7 +72,7 @@ hr{
     margin: auto;
 }
 
-.alert, div.form-error{
+.alert, div.form-error, div.form-success{
     padding: 1rem;
     margin: 2rem 0;
     border-radius: .3rem;
@@ -85,9 +85,13 @@ hr{
     color: white;
 }
 
-.alert.success{
+.alert.success, div.form-success{
     background-color: #23a123;
     color: white;
+}
+
+.a-href{
+    color: #2355a1;
 }
 
 pre {
