@@ -70,7 +70,8 @@ Kernel::get()->getRouter()
         'children'   => [
             'readme' => [
                 'path'       => '/readme',
-                'controller' => 'App\\Controller\\APIController#readme'
+                'controller' => 'App\\Controller\\APIController#readme',
+                'methods'    => [ 'GET' ]
             ]
         ]
     ])

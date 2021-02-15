@@ -42,7 +42,7 @@ class Router
     {
         $controllerInfo = explode('#', $array['controller']);
         $route = new Route($name, $array['path'], $controllerInfo[0], $controllerInfo[1] ?? null,
-            $array['params'] ?? [], $array['roles'] ?? []);
+            $array['params'] ?? [], $array['roles'] ?? [], $array['methods'] ?? []);
         foreach (($array['children'] ?? []) as $key => $value) {
             $route->add($this->createRecursive($key, $value));
         }

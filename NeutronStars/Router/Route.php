@@ -17,11 +17,12 @@ class Route
     private string $path;
     private array $params;
     private array $roles;
+    private array $methods;
 
     private bool $selected = false;
 
     public function __construct(string $name, string $path, string $controller,
-                                ?string $callMethod, array $params, array $roles)
+                                ?string $callMethod, array $params, array $roles, array $methods)
     {
         $this->name = $name;
         $this->path = $path;
@@ -29,6 +30,7 @@ class Route
         $this->callMethod = $callMethod ?? 'index';
         $this->params = $params;
         $this->roles = $roles;
+        $this->methods = $methods;
     }
 
     public function getName(): string
@@ -82,7 +84,11 @@ class Route
     public function get($path, array &$params, UserInterface $user): ?Route
     {
         if ($this->path === $path) {
-            if (empty($this->roles) || $user->hasRoles(...$this->roles)) {
+            if (
+                (empty($this->roles) || $user->hasRoles(...$this->roles))
+                &&
+                (empty($this->methods) || in_array($_SERVER['REQUEST_METHOD'], $this->methods))
+            ) {
                 return $this;
             }
             return null;
@@ -110,7 +116,11 @@ class Route
             if ('/' . $hash === $pathFormat) {
                 $params = $buildParams;
                 if (count(explode('/', ltrim($path, '/'))) === 1) {
-                    if (empty($this->roles) || $user->hasRoles(...$this->roles)) {
+                    if (
+                        (empty($this->roles) || $user->hasRoles(...$this->roles))
+                        &&
+                        (empty($this->methods) || in_array($_SERVER['REQUEST_METHOD'], $this->methods))
+                    ) {
                         return $this;
                     }
                     return null;
