@@ -2,6 +2,8 @@
 
 namespace NeutronStars\Service\Form;
 
+use NeutronStars\Service\HTTPCode;
+
 class FormBuilder
 {
     private string $formHTML;
@@ -22,6 +24,7 @@ class FormBuilder
             return;
         }
         if (!empty($this->errors['__token-csrf'])) {
+            header('HTTP/1.0 '.HTTPCode::CODE_419);
             $this->addAlert($this->errors['__token-csrf']);
             return;
         }

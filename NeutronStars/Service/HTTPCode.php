@@ -52,6 +52,7 @@ class HTTPCode
     public const CODE_416 = '416 Requested Range Unsatisfiable';
     public const CODE_417 = '417 Expectation Failed';
     public const CODE_418 = '418 I\'m a teapot';
+    public const CODE_419 = '419 Authentification Timeout';
     public const CODE_421 = '421 Bad Mapping / Misdirected Request';
     public const CODE_422 = '422 Unprocessable Entity';
     public const CODE_423 = '423 Locked';
