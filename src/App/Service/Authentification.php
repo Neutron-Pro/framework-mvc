@@ -1,7 +1,6 @@
 <?php
 namespace App\Service;
 
-
 use App\Model\UserModel;
 use DateTime;
 use NeutronStars\Entity\UserInterface;

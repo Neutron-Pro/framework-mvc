@@ -10,6 +10,7 @@ class User extends UserInterface
     private int $id;
     private string $email;
     private string $name;
+    private DateTime $createdAt;
 
     /**
      * @return int
@@ -68,7 +69,6 @@ class User extends UserInterface
     {
         $this->createdAt = $createdAt;
     }
-    private DateTime $createdAt;
 
     public function getRoles(): array
     {

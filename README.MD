@@ -24,6 +24,10 @@ use NeutronStars\View\ViewEngine;
 // Exemple: '/test' => http(s)://sub.domain.ext/test/
 define('BASE_PATH', '');
 
+// Mettre le nom de votre domaine au complet.
+// Attention: Ne pas mettre le / à la fin. La route s'en occupe déjà.
+define('DOMAIN_URL', 'http://localhost');
+
 /*
  * Le moteur par défaut que vous souhaitez sélectionner:
  * ViewEngine::DEFAULT ou ViewEngine::BLADE
@@ -73,6 +77,14 @@ define('MAIL_RECIPIENT_EMAIL', '');
 // Le nom de l'expéditeur que le client verra.
 define('MAIL_RECIPIENT_NAME', '');
 
+// Configuration de l'authentification des utilisateurs.
+// Définir le namespace de votre class User qui extends de NeutronStars\Entity\UserInterface
+define('USER_ENTITY', 'App\\Entity\\User');
+// Définir la class de chargement de l'utilisateur s'il est authentifié.
+// La class doit implémenter de NeutronStars\Service\AuthentificationInterface
+// define('USER_LOADER', 'App\\Service\\Authentification');
+// Le délai que la saison de l'utilisateur soit maintenant depuis sa dernière connexion.
+// define('USER_TIMEOUT', 86400);
 ```
 
 Pensez à bien démarrer votre serveur vers le dossier `public`.
@@ -112,6 +124,8 @@ Kernel::get()->getRouter()
 Les routes sont ajoutées grâce à la méthode `add` de `Router`. Ensuite vous devez lui renseigner un nom et un tableau contenant des paramètres clef.
 
 ```php
+use NeutronStars\Service\Role;
+
 $params = [
     /* L'URL à entrer dans le navigateur. */
     'path' => '/test',
@@ -119,7 +133,21 @@ $params = [
         Le chemin vers le controller ou la route se rendra ainsi que la méthode à appeler se trouvant dans se même controller. 
         Pattern: Your\\Namespace\\YourClassController#yourMethod
     */
-    'controller' => 'App\\Controller\\TestController#index'
+    'controller' => 'App\\Controller\\TestController#index',
+    /*
+        Permet de donner accès à vos routes qu'à certain utilisateur.
+        [ Role::USER, 'VIP'] => Donner accès a tous vos utilisateur connecté et à vos utilisateur VIP.
+        // VIP est un role que vous créez vous même.
+        S'il n'est pas renseigné ou bien que le tableau est vide alors toutes les personnes peuvent accéder à la route.
+        Les routes enfants ne prennent pas en compte les restrictions des parents.
+     */
+    'roles' => [ Role::ANONYMOUS ], // Donne accès a la route qu'aux utilisateurs non connectés.
+    /*
+        Les type de requête accepté pour cette route.
+        [ 'GET', 'POST' ] -> Accept les méthode de type GET & POST uniquement.
+        S'il n'est pas renseigné ou bien que le tableau est vide alors vous autorisez tout type de méthode.
+     */
+    'methods' => [ 'GET' ] // Accept uniquement les requêtes de type GET.
 ];
 // Ajouter votre route
 $router->add('test', $params);
@@ -334,6 +362,13 @@ Les vues est la partie la plus dense de votre site, c'est l'affichage qui change
     
     <!-- Si vous avez besoin de récupérer une route qui comporte des paramètres customisable: -->
     <a href="<?= $router->get('parent.child2', ['slug' => 'test', 'id' => '101']) ?>">L'enfant custom</a>
+    
+    <!-- Si vous souhaitez ajouter un lien au cas ou l'utilisateur ce trouve sur la même route -->
+    <a href=<?= $router->get('parent') ?> class="<?= $router->isRoute('parent')?>">Vous êtes sur la page ?</a>
+    
+    <!-- Si vous souhaitez ajouter un lien au cas ou l'utilisateur ce trouve sur la même route ou une route enfant à celle indiqué -->
+    <!-- Le booléan permet de savoir s'il la route doit strictement être correct non: Par défault il est à true -->
+    <a href=<?= $router->get('parent.child') ?> class="<?= $router->isRoute('parent', false)?>">Vous êtes sur la page Parent ou Enfant ?</a>
 </main>
 ```
 
@@ -440,4 +475,105 @@ class DefaultController extends Controller
         ->send('Mon Sujet', 'Bonjour Mr John Doe !', [], null, false);
   }
 }
+```
+
+---
+
+## La session d'authentification
+
+Pour créer un espace d'authentification. Il vous faudra créer deux class essentiels.
+
+La première est l'entité `Utilisateur` où sera stocké les données de votre utilisateur connecté.
+
+```php
+use NeutronStars\Entity\UserInterface;
+use NeutronStars\Service\Role;
+use DateTime;
+
+class User extends UserInterface
+{
+    // Variables d'exemple. Il sera bien sur préférable d'utiliser des GETTERS & SETTERS
+    public int $id;
+    public string $email;
+    public string $name;
+    public DateTime $createdAt;
+    
+    // Cette méthode est important car elle indique les roles que possède vos utilisateur.
+    // Sachez que par défaut un utilisateur non authentifié aura le role 'ANONYMOUS'.
+    // Pensez a bien donner au minimum le role 'USER' à tous vos utilisateurs.
+    // Deux autres roles sont également présent mais ne sont pour l'instant pas utilisé par le framework:
+    // MODERATOR & ADMIN. Vous pouvez bien sur les utiliser pour controller vos accès de vos routes.
+    public function getRoles() : array
+    {
+      return [ Role::USER ];
+    }
+}
+```
+
+La seconde class est la class qui permet de charger l'utilisateur depuis votre base de donnée.
+
+```php
+use App\Model\UserModel;
+use DateTime;
+use NeutronStars\Entity\UserInterface;
+use NeutronStars\Service\AuthenticationInterface;
+
+class Authentification implements AuthenticationInterface
+{
+    // Cette méthode permet de retourner si oui ou non l'utilisateur dois rester authentifier.
+    // Si elle retourne false alors les données charger de l'utilisateur seront perdus et il sera considéré comme Anonymous.
+    public function loadUser(UserInterface $user, $id): bool
+    {
+        $u = (new UserModel())->findById($id);
+        if ($u === null) {
+            return false;
+        }
+        $user->id = $u->id;
+        $user->name = $u->name;
+        $user->email = $u->email;
+        $user->createdAt = new DateTime($u->created_at);
+        return true;
+    }
+}
+```
+
+Dans vos vues, il vous sera possible de savoir si l'utilisateur est connecté et ses informations:
+
+### Avec Blade:
+
+```html
+@isConnected()
+    <div>
+        Bonjour {{ $user->name }}, vous êtes bien connecté !
+    </div>
+@else
+    <div>
+        Vous n'êtes pas connecté !
+    </div>
+@endIf
+
+{{-- Ou bien --}}
+@isNotConnected()
+    <div>
+        Vous n'êtes pas connecté !
+    </div>
+@else
+    <div>
+        Bonjour {{ $user->name }}, vous êtes bien connecté !
+    </div>
+@endIf
+```
+
+### Avec PHP (Rendu par défaut)
+
+```php
+<?php if($user->isConnected()): ?>
+    <div>
+        Bonjour <?= $user->name ?>, vous êtes bien connecté !
+    </div>
+<?php else: ?>
+    <div>
+        Vous n'êtes pas connecté !
+    </div>
+<?php endif; ?>
 ```
